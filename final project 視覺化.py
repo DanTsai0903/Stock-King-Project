@@ -8,6 +8,7 @@ class BigFrame(tk.Frame):
 		self.grid()
 		self.createWidgets()
 	
+	#創每個種類
 	def createWidgets(self):
 		f = tkFont.Font(size = 28 , family = "Courier New")
 				
@@ -31,6 +32,7 @@ class BigFrame(tk.Frame):
 		self.lbl符合廠商.grid(row = 7,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.txt符合廠商.grid(row = 8,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 
+	#創間每個category的條件-------------------------------------------------------
 	def clickBtn突破(self):
 		f = tkFont.Font(self,size = 28 , family = "Courier New")
 				
@@ -66,7 +68,7 @@ class BigFrame(tk.Frame):
 
 		self.Btntest7.grid(row = 1,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.Btntest8.grid(row = 2,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
-
+	#-----------------------------------------------------
 cal = BigFrame()
 cal.master.title("選股好簡單")
 cal.mainloop()	
