@@ -12,10 +12,10 @@ class BigFrame(tk.Frame):
 	def createWidgets(self):
 		f = tkFont.Font(size = 28 , family = "Courier New")
 				
-		self.Btn突破 = tk.Button(self,text = "突破",width = 8,command = self.clickBtn突破,font = f)
-		self.Btn乖離 = tk.Button(self,text = "乖離",width = 8,command = self.clickBtn乖離,font = f)
-		self.Btn趨勢 = tk.Button(self,text = "趨勢",width = 8,command = self.clickBtn趨勢,font = f)
-		self.Btn技術指標 = tk.Button(self,text = "技術指標",width = 8,command = self.clickBtn技術指標,font = f)
+		self.Btn成交量 = tk.Button(self,text = "成交量",width = 8,command = self.clickBtn成交量,font = f)
+		self.BtnPVT = tk.Button(self,text = "PVT",width = 8,command = self.clickBtnPVT,font = f)
+		self.Btn月線 = tk.Button(self,text = "月線",width = 8,command = self.clickBtn月線,font = f)
+		self.Btn週線 = tk.Button(self,text = "週線",width = 8,command = self.clickBtn週線,font = f)
 		
 		self.lbl選股條件 = tk.Label(self,text = "選股條件",height = 1,width = 32,font = f)
 		self.txt選股條件 = tk.Text(self,height = 5,width = 40 ,font = f)
@@ -23,17 +23,17 @@ class BigFrame(tk.Frame):
 		self.lbl符合廠商 = tk.Label(self,text = "符合廠商",height = 1,width = 32,font = f)
 		self.txt符合廠商 = tk.Text(self,height = 5,width = 40 ,font = f)
 		
-		self.Btn突破.grid(row = 0,column = 0,columnspan = 3,sticky = tk.NE + tk.SW)
-		self.Btn乖離.grid(row = 0,column = 3,columnspan = 3,sticky = tk.NE + tk.SW)
-		self.Btn趨勢.grid(row = 0,column = 6,columnspan = 3,sticky = tk.NE + tk.SW)
-		self.Btn技術指標.grid(row = 0,column = 9,columnspan = 3,sticky = tk.NE + tk.SW)
+		self.Btn成交量.grid(row = 0,column = 0,columnspan = 3,sticky = tk.NE + tk.SW)
+		self.BtnPVT.grid(row = 0,column = 3,columnspan = 3,sticky = tk.NE + tk.SW)
+		self.Btn月線.grid(row = 0,column = 6,columnspan = 3,sticky = tk.NE + tk.SW)
+		self.Btn週線.grid(row = 0,column = 9,columnspan = 3,sticky = tk.NE + tk.SW)
 		self.lbl選股條件.grid(row = 5,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.txt選股條件.grid(row = 6,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.lbl符合廠商.grid(row = 7,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.txt符合廠商.grid(row = 8,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 
 	#創間每個category的條件-------------------------------------------------------
-	def clickBtn突破(self):
+	def clickBtn成交量(self):
 		f = tkFont.Font(self,size = 28 , family = "Courier New")
 				
 		self.Btntest1 = tk.Button(self,text = "test1",width = 32,font = f)
@@ -42,7 +42,7 @@ class BigFrame(tk.Frame):
 		self.Btntest1.grid(row = 1,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.Btntest2.grid(row = 2,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 	
-	def clickBtn乖離(self):
+	def clickBtnPVT(self):
 		f = tkFont.Font(self,size = 28 , family = "Courier New")
 				
 		self.Btntest3 = tk.Button(self,text = "test3",width = 32,font = f)
@@ -51,7 +51,7 @@ class BigFrame(tk.Frame):
 		self.Btntest3.grid(row = 1,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.Btntest4.grid(row = 2,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 
-	def clickBtn趨勢(self):
+	def clickBtn月線(self):
 		f = tkFont.Font(self,size = 28 , family = "Courier New")
 				
 		self.Btntest5 = tk.Button(self,text = "test5",width = 32,font = f)
@@ -60,7 +60,7 @@ class BigFrame(tk.Frame):
 		self.Btntest5.grid(row = 1,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.Btntest6.grid(row = 2,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 
-	def clickBtn技術指標(self):
+	def clickBtn週線(self):
 		f = tkFont.Font(self,size = 28 , family = "Courier New")
 				
 		self.Btntest7 = tk.Button(self,text = "test7",width = 32,font = f)
