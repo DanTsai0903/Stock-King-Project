@@ -17,10 +17,10 @@ class BigFrame(tk.Frame):
         #創每個種類-----------------------------------------------------------------------------------------------------
         f = tkFont.Font(size = 14 , family = "Courier New")
                 
-        self.Btn突破 = tk.Button(self,text = "突破",width = 8,command = self.clickBtn突破,font = f)
-        self.Btn乖離 = tk.Button(self,text = "乖離",width = 8,command = self.clickBtn乖離,font = f)
-        self.Btn趨勢 = tk.Button(self,text = "趨勢",width = 8,command = self.clickBtn趨勢,font = f)
-        self.Btn技術指標 = tk.Button(self,text = "技術指標",width = 8,command = self.clickBtn技術指標,font = f)
+        self.Btn突破 = tk.Button(self,text = "突破",width = 8,command = self.clickBtn突破,font = f,bg = "light gray")
+        self.Btn乖離 = tk.Button(self,text = "乖離",width = 8,command = self.clickBtn乖離,font = f,bg = "WhiteSmoke")
+        self.Btn趨勢 = tk.Button(self,text = "趨勢",width = 8,command = self.clickBtn趨勢,font = f,bg = "WhiteSmoke")
+        self.Btn技術指標 = tk.Button(self,text = "技術指標",width = 8,command = self.clickBtn技術指標,font = f,bg = "WhiteSmoke")
         
         self.Btn今日盤中突破5日新高 = tk.Button(self,text = "今日盤中突破5日新高",command = self.clickBtn今日盤中突破5日新高,width = 32,font = f)
         self.Btn今日收盤突破月線 = tk.Button(self,text = "今日收盤突破月線",command = self.clickBtn今日收盤突破月線,width = 32,font = f)
@@ -77,12 +77,19 @@ class BigFrame(tk.Frame):
         self.全選股條件line.append(self.lbl選股條件line4)
         self.全選股條件line.append(self.lbl選股條件line5)
         self.全選股條件line.append(self.lbl選股條件line6)
+        
         #-----------------------------------------------------------------------------------------
         
         
     #創每個category的條件-------------------------------------------------------
     def clickBtn突破(self):
         f = tkFont.Font(self,size = 14 , family = "Courier New")
+        
+        self.Btn突破.configure(bg = "light gray")
+        self.Btn乖離.configure(bg = "WhiteSmoke")
+        self.Btn趨勢.configure(bg = "WhiteSmoke")
+        self.Btn技術指標.configure(bg = "WhiteSmoke")
+        
         self.Btn今日盤中突破5日新高 = tk.Button(self,text = "今日盤中突破5日新高",command = self.clickBtn今日盤中突破5日新高,width = 32,font = f)
         self.Btn今日收盤突破月線 = tk.Button(self,text = "今日收盤突破月線",command = self.clickBtn今日收盤突破月線,width = 32,font = f)
         self.Btn今日收盤突破季線 = tk.Button(self,text = "今日收盤突破季線",command = self.clickBtn今日收盤突破季線,width = 32,font = f)
@@ -101,6 +108,11 @@ class BigFrame(tk.Frame):
     def clickBtn乖離(self):
         f = tkFont.Font(self,size = 14 , family = "Courier New")
                 
+        self.Btn突破.configure(bg = "WhiteSmoke")
+        self.Btn乖離.configure(bg = "light gray")
+        self.Btn趨勢.configure(bg = "WhiteSmoke")
+        self.Btn技術指標.configure(bg = "WhiteSmoke")
+        
         self.Btn股價大於周線 = tk.Button(self,text = "股價大於周線5%",command = self.clickBtn股價大於周線,width = 32,font = f)
         self.Btn股價大於月線 = tk.Button(self,text = "股價大於月線10%",command = self.clickBtn股價大於月線,width = 32,font = f)
         self.Btn股價大於季線 = tk.Button(self,text = "股價大於季線20%",command = self.clickBtn股價大於季線,width = 32,font = f)
@@ -114,6 +126,11 @@ class BigFrame(tk.Frame):
         
     def clickBtn趨勢(self):
         f = tkFont.Font(self,size = 14 , family = "Courier New")
+        
+        self.Btn突破.configure(bg = "whitesmoke")
+        self.Btn乖離.configure(bg = "WhiteSmoke")
+        self.Btn趨勢.configure(bg = "light gray")
+        self.Btn技術指標.configure(bg = "WhiteSmoke")
                 
         self.Btn均線多頭排列 = tk.Button(self,text = "均線多頭排列",command = self.clickBtn均線多頭排列,width = 32,font = f)
         self.Btn均線空頭排列 = tk.Button(self,text = "均線空頭排列",command = self.clickBtn均線空頭排列,width = 32,font = f)
@@ -133,6 +150,11 @@ class BigFrame(tk.Frame):
 
     def clickBtn技術指標(self):
         f = tkFont.Font(self,size = 14 , family = "Courier New")
+        
+        self.Btn突破.configure(bg = "WhiteSmoke")
+        self.Btn乖離.configure(bg = "WhiteSmoke")
+        self.Btn趨勢.configure(bg = "WhiteSmoke")
+        self.Btn技術指標.configure(bg = "light gray")
         
         self.BtnKD黃金交叉日 = tk.Button(self,text = "KD黃金交叉(日)",command = self.clickBtnKD黃金交叉日,width = 32,font = f)
         self.BtnKD黃金交叉週 = tk.Button(self,text = "KD黃金交叉(週)",command = self.clickBtnKD黃金交叉週,width = 32,font = f)
@@ -184,7 +206,7 @@ class BigFrame(tk.Frame):
         self.setclick條件Btn("股價大於季線20%")
         
     #選擇趨勢選項-----------------------------------------------------------------------------
-	
+    
     def clickBtn均線多頭排列(self):
         self.setclick條件Btn("均線多頭排列")
     def clickBtn均線空頭排列(self):
@@ -224,4 +246,4 @@ class BigFrame(tk.Frame):
 
 cal = BigFrame()
 cal.master.title("選股好簡單")
-cal.mainloop()  
+cal.mainloop() 
