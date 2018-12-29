@@ -219,7 +219,7 @@ class BigFrame(tk.Frame):
         self.setclick條件Btn("週收盤連兩周上漲")
     def clickBtn月收盤連兩周上漲(self):
         self.setclick條件Btn("月收盤連兩周上漲")
-        
+
     #選擇技術指標選項--------------------------------------------------------------------------
     
     def clickBtnKD黃金交叉日(self):

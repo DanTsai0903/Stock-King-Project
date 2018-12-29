@@ -9,8 +9,6 @@ csv2801 = csv.DictReader(filehandler1)
 chead2801 = csv2801.fieldnames
 
 
-
-
 #建立 日期、價格、5日平均價格清單
 date = []
 price = []
