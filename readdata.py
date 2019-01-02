@@ -10,7 +10,6 @@ reader2 = csv.DictReader(filehandler)
 #csv.reader被csv.DictReader來取代，dictreader的好處是可以用欄位名稱來呼叫#
 ###################################################################
 cheader = reader2.fieldnames #這行的作用是不要管第一行（欄位名稱）
-print(cheader)
 
 
 
@@ -29,6 +28,26 @@ class stock:
 		self.MA20 = sum(stockDict_alldata[code][5][-20:-1])/20#月線(20日線)
 		self.MA60 = sum(stockDict_alldata[code][5][-60:-1])/60#季線(60日線)
 		
+		#計算KD值----------------------------------------------------------
+		self.initialK = 50#初始K
+		self.initialD = 50#初始D
+		for i in range(200):
+			preday = 200 - i#因為是從兩百天前開始算，所以要用200去減
+			
+			#未成熟隨機值
+			self.RSV = (stockDict_alldata[code][5][-preday] - min(stockDict_alldata[code][5][-preday-9:-preday])) / (max(stockDict_alldata[code][5][-preday-9:-preday]) - min(stockDict_alldata[code][5][-preday-9:-preday])) * 100
+			
+			self.K = self.initialK*(2/3) + self.RSV*(1/3)#當日k值
+			self.D = self.initialD*(2/3) + self.K*(1/3)#當日d值
+			
+			#將今日k值變成昨日k值,d值也一樣
+			self.initialK = self.K
+			self.initialD = self.D
+
+		self.K = self.initialK
+		self.D = self.initialD
+		
+
 	def __str__(self):
 		return self.code
 		
@@ -66,10 +85,12 @@ for line in reader2:
 		stockDict_alldata[line["證券代碼"].strip()][4].append(float(line["最低價(元)"]))
 		stockDict_alldata[line["證券代碼"].strip()][5].append(float(line["收盤價(元)"]))
 		stockDict_alldata[line["證券代碼"].strip()][6].append(float(line["成交量(千股)"]))
+		
 
 
-dict = dict()#儲存一家一家的公司，key是股票代碼，value是那間公司的「資料」（所以新建一個「stock」class, 這個class 儲存一家公司的資料）
+stockDict_stock = dict()#儲存一家一家的公司，key是股票代碼，value是那間公司的「資料」（所以新建一個「stock」class, 這個class 儲存一家公司的資料）
 for key in stockDict_alldata.keys():
-	dict[key] = stock(key)
+	stockDict_stock[key] = stock(key)
+
 
 filehandler.close()
