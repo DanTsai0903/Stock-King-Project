@@ -10,14 +10,43 @@ class stock:
 		#MA(moving average)均線
 		self.code = code
 		self.abbreviation = stockDict_alldata[code][0] #公司簡稱
-		self.opening = stockDict_alldata[code][2][-1] #今日開盤價
-		self.highest = stockDict_alldata[code][3][-1] #今日最高價
-		self.lowest =  stockDict_alldata[code][4][-1] #今日最低價
-		self.closing = stockDict_alldata[code][5][-1] #今日收盤價
-		self.volume = stockDict_alldata[code][6][-1] #今日成交量(千股)
-		self.MA5 = sum(stockDict_alldata[code][5][-5 : -1]) / 5 #周線(5日線)
-		self.MA20 = sum(stockDict_alldata[code][5][-20 : -1]) / 20 #月線(20日線)
-		self.MA60 = sum(stockDict_alldata[code][5][-60 : -1]) / 60 #季線(60日線)
+		self.opening = stockDict_alldata[code][2] #今日開盤價
+		self.highest = stockDict_alldata[code][3] #今日最高價
+		self.lowest =  stockDict_alldata[code][4] #今日最低價
+		self.closing = stockDict_alldata[code][5] #今日收盤價
+		self.volume = stockDict_alldata[code][6] #今日成交量(千股)
+
+		#計算均線--------------------------------------------------------
+		self.MA5 = [] #周線(5日線), a list
+		self.MA20 = [] #月線(20日線), a list
+		self.MA60 = [] #季線(60日線), a list
+		self.MA120 = [] #半年線(120日線), a list
+
+		c = 1 #counting
+		for i in range(len(self.closing)):
+			if c >= 5:
+				self.MA5.append(sum(self.closing[(c - 5) : c]) / 5)
+				if c >= 20:
+					self.MA20.append(sum(self.closing[(c - 20) : c]) / 20)
+					if c >= 60:
+						self.MA60.append(sum(self.closing[(c - 60) : c]) / 60)
+						if c >= 120:
+							self.MA120.append(sum(self.closing[(c - 120) : c]) / 120)
+						else:
+							self.MA120.append(None)
+					else:
+						self.MA60.append(None)
+						self.MA120.append(None)
+				else:
+					self.MA20.append(None)
+					self.MA60.append(None)
+					self.MA120.append(None)
+			else:
+				self.MA5.append(None)
+				self.MA20.append(None)
+				self.MA60.append(None)
+				self.MA120.append(None)
+			c += 1
 		
 		#計算KD值----------------------------------------------------------
 		self.initialK = 50 #初始K
@@ -248,25 +277,25 @@ class BigFrame(tk.Frame):
 	def clickBtn均線多頭排列(self):
 		self.setclick條件Btn("均線多頭排列")
 		for item in self.allcompany:
-			if stockDict_stock[item].MA5 <= stostockDict_stock[item].MA20 or stockDict_stock[item].MA20 <= stostockDict_stock[item].MA120:
+			if stockDict_stock[item].MA5[-1] <= stostockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] <= stostockDict_stock[item].MA120[-1]:
 				self.allcompany.remove(item)
 
 	def clickBtn均線空頭排列(self):
 		self.setclick條件Btn("均線空頭排列")
 		for item in self.allcompany:
-			if stockDict_stock[item].MA5 >= stostockDict_stock[item].MA20 or stockDict_stock[item].MA20 >= stostockDict_stock[item].MA120:
+			if stockDict_stock[item].MA5[-1] >= stostockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] >= stostockDict_stock[item].MA120[-1]:
 				self.allcompany.remove(item)
 
 	def clickBtn週線大於月線(self):
 		self.setclick條件Btn("週線大於月線")
 		for item in self.allcompany:
-			if stockDict_stock[item].MA5 <= stostockDict_stock[item].MA20:
+			if stockDict_stock[item].MA5[-1] <= stostockDict_stock[item].MA20[-1]:
 				self.allcompany.remove(item)
 
 	def clickBtn月線大於季線(self):
 		self.setclick條件Btn("月線大於季線")
 		for item in self.allcompany:
-			if stockDict_stock[item].MA20 <= stostockDict_stock[item].MA60:
+			if stockDict_stock[item].MA20[-1] <= stostockDict_stock[item].MA60[-1]:
 				self.allcompany.remove(item)
 	def clickBtn週收盤連兩周上漲(self):
 		self.setclick條件Btn("週收盤連兩周上漲")
@@ -329,7 +358,8 @@ for line in reader2:
 
 	if line["證券代碼"].strip() not in stockDict_alldata.keys():
 		abbreviation = line["簡稱"].strip()
-		date.append(line["年月日"])
+		d = line["年月日"].split("/")
+		date.append(datetime.date(int(d[0]), int(d[1]), int(d[2])))
 		opening.append(float(line["開盤價(元)"]))
 		highest.append(float(line["最高價(元)"]))
 		lowest.append(float(line["最低價(元)"]))
@@ -339,7 +369,8 @@ for line in reader2:
 		stockDict_alldata[line["證券代碼"].strip()] = allapecificdata
 		
 	else:
-		stockDict_alldata[line["證券代碼"].strip()][1].append(line["年月日"])
+		d = line["年月日"].split("/")
+		stockDict_alldata[line["證券代碼"].strip()][1].append(datetime.date(int(d[0]), int(d[1]), int(d[2])))
 		stockDict_alldata[line["證券代碼"].strip()][2].append(float(line["開盤價(元)"]))
 		stockDict_alldata[line["證券代碼"].strip()][3].append(float(line["最高價(元)"]))
 		stockDict_alldata[line["證券代碼"].strip()][4].append(float(line["最低價(元)"]))
