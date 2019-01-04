@@ -269,6 +269,7 @@ class BigFrame(tk.Frame):
                         a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA20[-1]:
                         b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA20[-1]:
                         if a == b == True:
+                                pass
                         else:
                                 self.allcompany.remove(item)
         def clickBtn今日收盤突破季線(self):
@@ -277,6 +278,7 @@ class BigFrame(tk.Frame):
                         a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA60[-1]:
                         b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA60[-1]:
                         if a == b == True:
+                                pass
                         else:
                                 self.allcompany.remove(item)
         def clickBtn今日收盤跌破月線(self):
@@ -285,6 +287,7 @@ class BigFrame(tk.Frame):
                         a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA20[-1]:
                         b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA20[-1]:
                         if a == b == True:
+                                pass
                         else:
                                 self.allcompany.remove(item)
         def clickBtn今日收盤跌破季線(self):
@@ -293,6 +296,7 @@ class BigFrame(tk.Frame):
                         a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA60[-1]:
                         b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA60[-1]:
                         if a == b == True:
+                                pass
                         else:
                                 self.allcompany.remove(item)
 
