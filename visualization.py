@@ -268,10 +268,19 @@ class BigFrame(tk.Frame):
 	#運算乖離的部分-----------------------------------------------------------------------------
 	
 	def clickBtn股價大於周線(self):
+		for item in self.allcompany:
+			if stockDict_stock[item].closing[-1] <= 1.05 * stockDict_stock[item].MA5[-1]:
+				self.allcompany.remove(item)
 		self.setclick條件Btn("股價大於周線5%")
 	def clickBtn股價大於月線(self):
+		for item in self.allcompany:
+			if stockDict_stock[item].closing[-1] <= 1.1 * stockDict_stock[item].MA20[-1]:
+				self.allcompany.remove(item)
 		self.setclick條件Btn("股價大於月線10%")
 	def clickBtn股價大於季線(self):
+		for item in self.allcompany:
+			if stockDict_stock[item].closing[-1] <= 1.2 * stockDict_stock[item].MA5[-1]:
+				self.allcompany.remove(item)
 		self.setclick條件Btn("股價大於季線20%")
 		
 	#運算趨勢的部分-----------------------------------------------------------------------------
