@@ -254,16 +254,47 @@ class BigFrame(tk.Frame):
 		self.條件數量n += 1
 		
 	#運算突破的部分-------------------------------------------------------------------
-	def clickBtn今日盤中突破5日新高(self):
-		self.setclick條件Btn("今日盤中突破5日新高")
-	def clickBtn今日收盤突破月線(self):
-		self.setclick條件Btn("今日收盤突破月線")
-	def clickBtn今日收盤突破季線(self):
-		self.setclick條件Btn("今日收盤突破季線")
-	def clickBtn今日收盤跌破月線(self):
-		self.setclick條件Btn("今日收盤跌破月線")
-	def clickBtn今日收盤跌破季線(self):
-		self.setclick條件Btn("今日收盤跌破季線")
+        def clickBtn今日盤中突破5日新高(self):
+                self.setclick條件Btn("今日盤中突破5日新高")
+                for item in self.allcompany:
+                        a = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-2]
+                        b = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-3]
+                        c = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-4]
+                        d = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-5]
+                        if a or b or c or d:
+                                self.allcompany.remove(item)
+        def clickBtn今日收盤突破月線(self):
+                self.setclick條件Btn("今日收盤突破月線")
+                for item in self.allcompany:
+                        a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA20[-1]:
+                        b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA20[-1]:
+                        if a == b == True:
+                        else:
+                                self.allcompany.remove(item)
+        def clickBtn今日收盤突破季線(self):
+                self.setclick條件Btn("今日收盤突破季線")
+                for item in self.allcompany:
+                        a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA60[-1]:
+                        b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA60[-1]:
+                        if a == b == True:
+                        else:
+                                self.allcompany.remove(item)
+        def clickBtn今日收盤跌破月線(self):
+                self.setclick條件Btn("今日收盤跌破月線")
+                for item in self.allcompany:
+                        a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA20[-1]:
+                        b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA20[-1]:
+                        if a == b == True:
+                        else:
+                                self.allcompany.remove(item)
+        def clickBtn今日收盤跌破季線(self):
+                self.setclick條件Btn("今日收盤跌破季線")
+                for item in self.allcompany:
+                        a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA60[-1]:
+                        b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA60[-1]:
+                        if a == b == True:
+                        else:
+                                self.allcompany.remove(item)
 
 	#運算乖離的部分-----------------------------------------------------------------------------
 	
