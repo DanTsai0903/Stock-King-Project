@@ -49,52 +49,52 @@ class stock:
 			c += 1
 		
 		#計算日KD值----------------------------------------------------------
-        self.K = [] 
-        self.D = [] 
+		self.K = [] 
+		self.D = [] 
 
-        #(第一個日ＫＤ值)
-        self.RSV = (self.closing[0] - self.lowest[0]) / (self.highest[0] - self.lowest[0]) * 100
-        self.K.append(self.RSV / 3 + 100 / 3)
-        self.D.append(self.K / 3 + 100 / 3)
+		#(第一個日ＫＤ值)
+		self.RSV = (self.closing[0] - self.lowest[0]) / (self.highest[0] - self.lowest[0]) * 100
+		self.K.append(self.RSV / 3 + 100 / 3)
+		self.D.append(self.K / 3 + 100 / 3)
 
-        for i in range(1, len(self.closing)):
-            self.RSV = (self.closing[i] - self.lowest[i]) / (self.highest[i] - self.lowest[i]) * 100
-            self.K.append(self.RSV / 3 + self.K[i - 1] * 2 / 3)
-            self.D.append(self.K / 3 + self.D[i - 1] * 2 / 3)
+		for i in range(1, len(self.closing)):
+			self.RSV = (self.closing[i] - self.lowest[i]) / (self.highest[i] - self.lowest[i]) * 100
+			self.K.append(self.RSV / 3 + self.K[i - 1] * 2 / 3)
+			self.D.append(self.K / 3 + self.D[i - 1] * 2 / 3)
 
-        #計算週KD值----------------------------------------------------------
-        self.Kweek = [] 
-        self.Dweek = [] 
-        for i in range(4):
-            self.Kweek.append(None)
-            self.Dweek.append(None)
+		#計算週KD值----------------------------------------------------------
+		self.Kweek = [] 
+		self.Dweek = [] 
+		for i in range(4):
+			self.Kweek.append(None)
+			self.Dweek.append(None)
 
-        #(第一個週ＫＤ值)
-        self.RSVweek = (self.closing[0] - min(self.lowest[0 : 5])) / (max(self.highest[0 : 5]) - min(self.lowest[0 : 5])) * 100
-        self.Kweek.append(self.RSVweek / 3 + 100 / 3)
-        self.Dweek.append(self.Kweek / 3 + 100 / 3)
+		#(第一個週ＫＤ值)
+		self.RSVweek = (self.closing[0] - min(self.lowest[0 : 5])) / (max(self.highest[0 : 5]) - min(self.lowest[0 : 5])) * 100
+		self.Kweek.append(self.RSVweek / 3 + 100 / 3)
+		self.Dweek.append(self.Kweek / 3 + 100 / 3)
 
-        for i in range(5, len(self.closing)):
-            self.RSVweek = (self.closing[i] - min(self.lowest[(i - 4) : (i + 1)])) / (max(self.highest[(i - 4) : (i + 1)]) - min(self.lowest[(i - 4) : (i + 1)])) * 100
-            self.Kweek.append(self.RSVweek / 3 + self.Kweek[i - 1] * 2 / 3)
-            self.Dweek.append(self.Kweek / 3 + self.Dweek[i - 1] * 2 / 3)
+		for i in range(5, len(self.closing)):
+			self.RSVweek = (self.closing[i] - min(self.lowest[(i - 4) : (i + 1)])) / (max(self.highest[(i - 4) : (i + 1)]) - min(self.lowest[(i - 4) : (i + 1)])) * 100
+			self.Kweek.append(self.RSVweek / 3 + self.Kweek[i - 1] * 2 / 3)
+			self.Dweek.append(self.Kweek / 3 + self.Dweek[i - 1] * 2 / 3)
 
-        #計算月KD值----------------------------------------------------------
-        self.Kmonth = [] 
-        self.Dmonth = [] 
-        for i in range(19):
-            self.Kmonth.append(None)
-            self.Dmonth.append(None)
+		#計算月KD值----------------------------------------------------------
+		self.Kmonth = [] 
+		self.Dmonth = [] 
+		for i in range(19):
+			self.Kmonth.append(None)
+			self.Dmonth.append(None)
 
-        #(第一個月ＫＤ值)
-        self.RSVmonth = (self.closing[0] - min(self.lowest[0 : 20])) / (max(self.highest[0 : 20]) - min(self.lowest[0 : 20])) * 100
-        self.Kmonth.append(self.RSVmonth / 3 + 100 / 3)
-        self.Dmonth.append(self.Kmonth / 3 + 100 / 3)
+		#(第一個月ＫＤ值)
+		self.RSVmonth = (self.closing[0] - min(self.lowest[0 : 20])) / (max(self.highest[0 : 20]) - min(self.lowest[0 : 20])) * 100
+		self.Kmonth.append(self.RSVmonth / 3 + 100 / 3)
+		self.Dmonth.append(self.Kmonth / 3 + 100 / 3)
 
-        for i in range(20, len(self.closing)):
-            self.RSVmonth = (self.closing[i] - min(self.lowest[(i - 19) : (i + 1)])) / (max(self.highest[(i - 19) : (i + 1)]) - min(self.lowest[(i - 19) : (i + 1)])) * 100
-            self.Kmonth.append(self.RSVmonth / 3 + self.Kmonth[i - 1] * 2 / 3)
-            self.Dmonth.append(self.Kmonth / 3 + self.Dmonth[i - 1] * 2 / 3)
+		for i in range(20, len(self.closing)):
+			self.RSVmonth = (self.closing[i] - min(self.lowest[(i - 19) : (i + 1)])) / (max(self.highest[(i - 19) : (i + 1)]) - min(self.lowest[(i - 19) : (i + 1)])) * 100
+			self.Kmonth.append(self.RSVmonth / 3 + self.Kmonth[i - 1] * 2 / 3)
+			self.Dmonth.append(self.Kmonth / 3 + self.Dmonth[i - 1] * 2 / 3)
 		
 
 	def __str__(self):
@@ -281,51 +281,51 @@ class BigFrame(tk.Frame):
 		self.條件數量n += 1
 		
 	#運算突破的部分-------------------------------------------------------------------
-        def clickBtn今日盤中突破5日新高(self):
-                self.setclick條件Btn("今日盤中突破5日新高")
-                for item in self.allcompany:
-                        a = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-2]
-                        b = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-3]
-                        c = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-4]
-                        d = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-5]
-                        if a or b or c or d:
-                                self.allcompany.remove(item)
-        def clickBtn今日收盤突破月線(self):
-                self.setclick條件Btn("今日收盤突破月線")
-                for item in self.allcompany:
-                        a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA20[-1]:
-                        b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA20[-1]:
-                        if a == b == True:
-                                pass
-                        else:
-                                self.allcompany.remove(item)
-        def clickBtn今日收盤突破季線(self):
-                self.setclick條件Btn("今日收盤突破季線")
-                for item in self.allcompany:
-                        a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA60[-1]:
-                        b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA60[-1]:
-                        if a == b == True:
-                                pass
-                        else:
-                                self.allcompany.remove(item)
-        def clickBtn今日收盤跌破月線(self):
-                self.setclick條件Btn("今日收盤跌破月線")
-                for item in self.allcompany:
-                        a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA20[-1]:
-                        b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA20[-1]:
-                        if a == b == True:
-                                pass
-                        else:
-                                self.allcompany.remove(item)
-        def clickBtn今日收盤跌破季線(self):
-                self.setclick條件Btn("今日收盤跌破季線")
-                for item in self.allcompany:
-                        a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA60[-1]:
-                        b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA60[-1]:
-                        if a == b == True:
-                                pass
-                        else:
-                                self.allcompany.remove(item)
+	def clickBtn今日盤中突破5日新高(self):
+		self.setclick條件Btn("今日盤中突破5日新高")
+		for item in self.allcompany:
+			a = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-2]
+			b = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-3]
+			c = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-4]
+			d = stockDict_stock[item].highest[-1] < stostockDict_stock[item].highest[-5]
+			if a or b or c or d:
+				self.allcompany.remove(item)
+	def clickBtn今日收盤突破月線(self):
+		self.setclick條件Btn("今日收盤突破月線")
+		for item in self.allcompany:
+			a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA20[-1]:
+			b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA20[-1]:
+			if a == b == True:
+				pass
+			else:
+				self.allcompany.remove(item)
+	def clickBtn今日收盤突破季線(self):
+		self.setclick條件Btn("今日收盤突破季線")
+		for item in self.allcompany:
+			a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA60[-1]:
+			b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA60[-1]:
+			if a == b == True:
+				pass
+			else:
+				self.allcompany.remove(item)
+	def clickBtn今日收盤跌破月線(self):
+		self.setclick條件Btn("今日收盤跌破月線")
+		for item in self.allcompany:
+			a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA20[-1]:
+			b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA20[-1]:
+			if a == b == True:
+				pass
+			else:
+				self.allcompany.remove(item)
+	def clickBtn今日收盤跌破季線(self):
+		self.setclick條件Btn("今日收盤跌破季線")
+		for item in self.allcompany:
+			a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA60[-1]:
+			b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA60[-1]:
+			if a == b == True:
+				pass
+			else:
+				self.allcompany.remove(item)
 
 	#運算乖離的部分-----------------------------------------------------------------------------
 	
@@ -381,60 +381,60 @@ class BigFrame(tk.Frame):
 		self.setclick條件Btn("月收盤連兩周上漲")
 
 	#「技術指標」部分的運算--------------------------------------------------------------------------
-    def clickBtnKD黃金交叉日(self):
-        self.setclick條件Btn("KD黃金交叉(日)")
-        for item in self.allcompany:
-            p = stockDict_stock[item].K[-1] > stockDict_stock[item].D[-1]
-            q = stockDict_stock[item].K[-2] < stockDict_stock[item].D[-2]
-            if p and q:
-                pass
-            else:
-                self.allcompany.remove(item)
-    def clickBtnKD黃金交叉週(self):
-        self.setclick條件Btn("KD黃金交叉(週)")
-        for item in self.allcompany:
-            p = stockDict_stock[item].Kweek[-1] > stockDict_stock[item].Dweek[-1]
-            q = stockDict_stock[item].Kweek[-2] < stockDict_stock[item].Dweek[-2]
-            if p and q:
-                pass
-            else:
-                self.allcompany.remove(item)
-    def clickBtnKD黃金交叉月(self):
-        self.setclick條件Btn("KD黃金交叉(月)")
-        for item in self.allcompany:
-            p = stockDict_stock[item].Kmonth[-1] > stockDict_stock[item].Dmonth[-1]
-            q = stockDict_stock[item].Kmonth[-2] < stockDict_stock[item].Dmonth[-2]
-            if p and q:
-                pass
-            else:
-                self.allcompany.remove(item)
-    def clickBtnKD死亡交叉日(self):
-        self.setclick條件Btn("KD死亡交叉(日)")
-        for item in self.allcompany:
-            p = stockDict_stock[item].K[-1] < stockDict_stock[item].D[-1]
-            q = stockDict_stock[item].K[-2] > stockDict_stock[item].D[-2]
-            if p and q:
-                pass
-            else:
-                self.allcompany.remove(item)
-    def clickBtnKD死亡交叉週(self):
-        self.setclick條件Btn("KD死亡交叉(週)")
-        for item in self.allcompany:
-            p = stockDict_stock[item].Kweek[-1] < stockDict_stock[item].Dweek[-1]
-            q = stockDict_stock[item].Kweek[-2] > stockDict_stock[item].Dweek[-2]
-            if p and q:
-                pass
-            else:
-                self.allcompany.remove(item)
-    def clickBtnKD死亡交叉月(self):
-        self.setclick條件Btn("KD死亡交叉(月)")
-        for item in self.allcompany:
-            p = stockDict_stock[item].Kmonth[-1] < stockDict_stock[item].Dmonth[-1]
-            q = stockDict_stock[item].Kmonth[-2] > stockDict_stock[item].Dmonth[-2]
-            if p and q:
-                pass
-            else:
-                self.allcompany.remove(item)
+	def clickBtnKD黃金交叉日(self):
+		self.setclick條件Btn("KD黃金交叉(日)")
+		for item in self.allcompany:
+			p = stockDict_stock[item].K[-1] > stockDict_stock[item].D[-1]
+			q = stockDict_stock[item].K[-2] < stockDict_stock[item].D[-2]
+			if p and q:
+				pass
+			else:
+				self.allcompany.remove(item)
+	def clickBtnKD黃金交叉週(self):
+		self.setclick條件Btn("KD黃金交叉(週)")
+		for item in self.allcompany:
+			p = stockDict_stock[item].Kweek[-1] > stockDict_stock[item].Dweek[-1]
+			q = stockDict_stock[item].Kweek[-2] < stockDict_stock[item].Dweek[-2]
+			if p and q:
+				pass
+			else:
+				self.allcompany.remove(item)
+	def clickBtnKD黃金交叉月(self):
+		self.setclick條件Btn("KD黃金交叉(月)")
+		for item in self.allcompany:
+			p = stockDict_stock[item].Kmonth[-1] > stockDict_stock[item].Dmonth[-1]
+			q = stockDict_stock[item].Kmonth[-2] < stockDict_stock[item].Dmonth[-2]
+			if p and q:
+				pass
+			else:
+				self.allcompany.remove(item)
+	def clickBtnKD死亡交叉日(self):
+		self.setclick條件Btn("KD死亡交叉(日)")
+		for item in self.allcompany:
+			p = stockDict_stock[item].K[-1] < stockDict_stock[item].D[-1]
+			q = stockDict_stock[item].K[-2] > stockDict_stock[item].D[-2]
+			if p and q:
+				pass
+			else:
+				self.allcompany.remove(item)
+	def clickBtnKD死亡交叉週(self):
+		self.setclick條件Btn("KD死亡交叉(週)")
+		for item in self.allcompany:
+			p = stockDict_stock[item].Kweek[-1] < stockDict_stock[item].Dweek[-1]
+			q = stockDict_stock[item].Kweek[-2] > stockDict_stock[item].Dweek[-2]
+			if p and q:
+				pass
+			else:
+				self.allcompany.remove(item)
+	def clickBtnKD死亡交叉月(self):
+		self.setclick條件Btn("KD死亡交叉(月)")
+		for item in self.allcompany:
+			p = stockDict_stock[item].Kmonth[-1] < stockDict_stock[item].Dmonth[-1]
+			q = stockDict_stock[item].Kmonth[-2] > stockDict_stock[item].Dmonth[-2]
+			if p and q:
+				pass
+			else:
+				self.allcompany.remove(item)
 
 	#刪除條件的函數--------------------------------------------------------------
 	def clickDelBtn(self):
