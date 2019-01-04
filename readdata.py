@@ -59,24 +59,53 @@ class stock:
                 self.MA120.append(None)
             c += 1
         
-        #計算KD值----------------------------------------------------------
-        self.initialK = 50 #初始K
-        self.initialD = 50 #初始D
-        for i in range(200):
-            preday = 200 - i #因為是從兩百天前開始算，所以要用200去減
-            
-            #未成熟隨機值
-            self.RSV = (stockDict_alldata[code][5][-preday] - min(stockDict_alldata[code][5][-preday-9 : -preday])) / (max(stockDict_alldata[code][5][-preday-9 : -preday]) - min(stockDict_alldata[code][5][-preday-9 : -preday])) * 100
-            
-            self.K = self.initialK * (2/3) + self.RSV * (1 / 3)#當日k值
-            self.D = self.initialD * (2/3) + self.K * (1 / 3)#當日d值
-            
-            #將今日k值變成昨日k值,d值也一樣
-            self.initialK = self.K
-            self.initialD = self.D
+        #計算日KD值----------------------------------------------------------
+		self.K = [] 
+        self.D = [] 
 
-        self.K = self.initialK
-        self.D = self.initialD
+        #(第一個日ＫＤ值)
+        self.RSV = (self.closing[0] - self.lowest[0]) / (self.highest[0] - self.lowest[0]) * 100
+        self.K.append(self.RSV / 3 + 100 / 3)
+        self.D.append(self.K / 3 + 100 / 3)
+
+		for i in range(1, len(self.closing)):
+            self.RSV = (self.closing[i] - self.lowest[i]) / (self.highest[i] - self.lowest[i]) * 100
+            self.K.append(self.RSV / 3 + self.K[i - 1] * 2 / 3)
+            self.D.append(self.K / 3 + self.D[i - 1] * 2 / 3)
+
+        #計算週KD值----------------------------------------------------------
+        self.Kweek = [] 
+        self.Dweek = [] 
+        for i in range(4):
+            self.Kweek.append(None)
+            self.Dweek.append(None)
+
+        #(第一個週ＫＤ值)
+        self.RSVweek = (self.closing[0] - min(self.lowest[0 : 5])) / (max(self.highest[0 : 5]) - min(self.lowest[0 : 5])) * 100
+        self.Kweek.append(self.RSVweek / 3 + 100 / 3)
+        self.Dweek.append(self.Kweek / 3 + 100 / 3)
+
+        for i in range(5, len(self.closing)):
+            self.RSVweek = (self.closing[i] - min(self.lowest[(i - 4) : (i + 1)])) / (max(self.highest[(i - 4) : (i + 1)]) - min(self.lowest[(i - 4) : (i + 1)])) * 100
+            self.Kweek.append(self.RSVweek / 3 + self.Kweek[i - 1] * 2 / 3)
+            self.Dweek.append(self.Kweek / 3 + self.Dweek[i - 1] * 2 / 3)
+
+        #計算月KD值----------------------------------------------------------
+        self.Kmonth = [] 
+        self.Dmonth = [] 
+        for i in range(19):
+            self.Kmonth.append(None)
+            self.Dmonth.append(None)
+
+        #(第一個月ＫＤ值)
+        self.RSVmonth = (self.closing[0] - min(self.lowest[0 : 20])) / (max(self.highest[0 : 20]) - min(self.lowest[0 : 20])) * 100
+        self.Kmonth.append(self.RSVmonth / 3 + 100 / 3)
+        self.Dmonth.append(self.Kmonth / 3 + 100 / 3)
+
+        for i in range(20, len(self.closing)):
+            self.RSVmonth = (self.closing[i] - min(self.lowest[(i - 19) : (i + 1)])) / (max(self.highest[(i - 19) : (i + 1)]) - min(self.lowest[(i - 19) : (i + 1)])) * 100
+            self.Kmonth.append(self.RSVmonth / 3 + self.Kmonth[i - 1] * 2 / 3)
+            self.Dmonth.append(self.Kmonth / 3 + self.Dmonth[i - 1] * 2 / 3)
         
 
     def __str__(self):
