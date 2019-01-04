@@ -1,5 +1,47 @@
 import tkinter as tk
 import tkinter.font as tkFont
+import csv
+import datetime
+
+
+class stock:
+	def __init__(self, code):
+		#新建那些list, 包括date, opening, ......
+		#MA(moving average)均線
+		self.code = code
+		self.abbreviation = stockDict_alldata[code][0] #公司簡稱
+		self.opening = stockDict_alldata[code][2][-1] #今日開盤價
+		self.highest = stockDict_alldata[code][3][-1] #今日最高價
+		self.lowest =  stockDict_alldata[code][4][-1] #今日最低價
+		self.closing = stockDict_alldata[code][5][-1] #今日收盤價
+		self.volume = stockDict_alldata[code][6][-1] #今日成交量(千股)
+		self.MA5 = sum(stockDict_alldata[code][5][-5 : -1]) / 5 #周線(5日線)
+		self.MA20 = sum(stockDict_alldata[code][5][-20 : -1]) / 20 #月線(20日線)
+		self.MA60 = sum(stockDict_alldata[code][5][-60 : -1]) / 60 #季線(60日線)
+		
+		#計算KD值----------------------------------------------------------
+		self.initialK = 50 #初始K
+		self.initialD = 50 #初始D
+		for i in range(200):
+			preday = 200 - i #因為是從兩百天前開始算，所以要用200去減
+			
+			#未成熟隨機值
+			self.RSV = (stockDict_alldata[code][5][-preday] - min(stockDict_alldata[code][5][-preday-9 : -preday])) / (max(stockDict_alldata[code][5][-preday-9 : -preday]) - min(stockDict_alldata[code][5][-preday-9 : -preday])) * 100
+			
+			self.K = self.initialK * (2/3) + self.RSV * (1 / 3)#當日k值
+			self.D = self.initialD * (2/3) + self.K * (1 / 3)#當日d值
+			
+			#將今日k值變成昨日k值,d值也一樣
+			self.initialK = self.K
+			self.initialD = self.D
+
+		self.K = self.initialK
+		self.D = self.initialD
+		
+
+	def __str__(self):
+		return self.code
+		
 
 
 class BigFrame(tk.Frame):
@@ -12,6 +54,9 @@ class BigFrame(tk.Frame):
         self.條件list = []#以選的條件放進list
         self.條件數量n = 0#以選的條件數量
         
+		self.allcompany = []
+		for company in stockDict_stock.keys():
+			self.allcompany.append(company)
     
     def createWidgets(self):
         #創每個種類-----------------------------------------------------------------------------------------------------
@@ -68,8 +113,9 @@ class BigFrame(tk.Frame):
         
         self.Btn開始選股.grid(row = 17,column = 0,columnspan = 6,sticky = tk.NE + tk.SW)
         self.Btn重設條件.grid(row = 17,column = 6,columnspan = 6,sticky = tk.NE + tk.SW)
-        self.lbl符合廠商.grid(row = 18,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
-        self.lbl符合廠商列.grid(row = 19,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
+		self.BtnQuit.grid(row = 1,column = 6,columnspan = 6,sticky = tk.NE + tk.SW)
+        # self.lbl符合廠商.grid(row = 18,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
+        # self.lbl符合廠商列.grid(row = 19,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 
         self.全選股條件line.append(self.lbl選股條件line1)
         self.全選股條件line.append(self.lbl選股條件line2)
@@ -177,14 +223,12 @@ class BigFrame(tk.Frame):
         self.lbl = tk.Label(self,height = 1,width = 40 ,font = f,background = 'white')
         self.lbl.grid(row = line + 5,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 
-    #創每個category的條件-------------------------------------------------------
+    #創每個category的條件----------------------------------------------------------
     def setclick條件Btn(self,條件):
-        self.條件list.append(條件)
         self.全選股條件line[self.條件數量n].configure(text = str(條件))
         self.條件數量n += 1
         
-    #選擇突破選項------------------------------------------------------------------------------
-    
+    #選擇突破選項並顯示於以選條件-------------------------------------------------------------------
     def clickBtn今日盤中突破5日新高(self):
         self.setclick條件Btn("今日盤中突破5日新高")
     def clickBtn今日收盤突破月線(self):
@@ -196,7 +240,7 @@ class BigFrame(tk.Frame):
     def clickBtn今日收盤跌破季線(self):
         self.setclick條件Btn("今日收盤跌破季線")
 
-    #選擇乖離選項-----------------------------------------------------------------------------
+    #選擇乖離選項並顯示於以選條件-----------------------------------------------------------------------------
     
     def clickBtn股價大於周線(self):
         self.setclick條件Btn("股價大於周線5%")
@@ -205,22 +249,37 @@ class BigFrame(tk.Frame):
     def clickBtn股價大於季線(self):
         self.setclick條件Btn("股價大於季線20%")
         
-    #選擇趨勢選項-----------------------------------------------------------------------------
+    #選擇趨勢選項並顯示於以選條件-----------------------------------------------------------------------------
     
     def clickBtn均線多頭排列(self):
         self.setclick條件Btn("均線多頭排列")
+		for item in self.allcompany:
+			if stockDict_stock[item].MA5 <= stostockDict_stock[item].MA20 or stockDict_stock[item].MA20 <= stostockDict_stock[item].MA120:
+				self.allcompany.remove(item)
+
     def clickBtn均線空頭排列(self):
         self.setclick條件Btn("均線空頭排列")
+		for item in self.allcompany:
+			if stockDict_stock[item].MA5 >= stostockDict_stock[item].MA20 or stockDict_stock[item].MA20 >= stostockDict_stock[item].MA120:
+				self.allcompany.remove(item)
+
     def clickBtn週線大於月線(self):
         self.setclick條件Btn("週線大於月線")
+		for item in self.allcompany:
+			if stockDict_stock[item].MA5 <= stostockDict_stock[item].MA20:
+				self.allcompany.remove(item)
+
     def clickBtn月線大於季線(self):
         self.setclick條件Btn("月線大於季線")
+		for item in self.allcompany:
+			if stockDict_stock[item].MA20 <= stostockDict_stock[item].MA60:
+				self.allcompany.remove(item)
     def clickBtn週收盤連兩周上漲(self):
         self.setclick條件Btn("週收盤連兩周上漲")
     def clickBtn月收盤連兩周上漲(self):
         self.setclick條件Btn("月收盤連兩周上漲")
 
-    #選擇技術指標選項--------------------------------------------------------------------------
+    #選擇技術指標選項並顯示於以選條件--------------------------------------------------------------------------
     
     def clickBtnKD黃金交叉日(self):
         self.setclick條件Btn("KD黃金交叉(日)")
@@ -240,10 +299,68 @@ class BigFrame(tk.Frame):
         for 條件 in self.全選股條件line:
             條件.configure(text = "")
         self.條件數量n = 0
-        self.條件list = []
-    
-        
+	
+		self.allcompany = []
+		for company in stockDict_stock.keys():
+			self.allcompany.append(company)
+			
+	#開始選股的函數--------------------------------------------------------------
+    # def clickBtn開始選股(self):
+		# for item in self.allcompany:
+			
+
+		
+#讀入檔案
+#輸入要讀的檔名
+filename = input()
+filehandler = open(filename, 'r', newline = '', encoding = 'utf-8', errors = "ignore") #建立filehandler
+reader2 = csv.DictReader(filehandler)
+####################################################################
+#csv.reader被csv.DictReader來取代，dictreader的好處是可以用欄位名稱來呼叫#
+###################################################################
+cheader = reader2.fieldnames #這行的作用是不要管第一行（欄位名稱）
+	
+	
+stockDict_alldata = dict() #儲存一家一家的公司，key是股票代碼，value是那間公司的「歷史資料」
+for line in reader2:
+	#如果以「line["證券代碼"]」為key的資料不存在
+		#則新增一筆資料、key是line["證券代碼"]、value是歷史資料
+	#然後把這行line的每一欄位加入到以「line["證券代碼"]」為key的資料中
+	allapecificdata = [] #一個大list，放下面所有小list
+	
+	date = [] #時間
+	opening = [] #開盤價
+	highest = [] #最高價
+	lowest = [] #最低價
+	closing = [] #收盤價
+	volume = [] #成交量
+
+	if line["證券代碼"].strip() not in stockDict_alldata.keys():
+		abbreviation = line["簡稱"].strip()
+		date.append(line["年月日"])
+		opening.append(float(line["開盤價(元)"]))
+		highest.append(float(line["最高價(元)"]))
+		lowest.append(float(line["最低價(元)"]))
+		closing.append(float(line["收盤價(元)"]))
+		volume.append(float(line["成交量(千股)"]))
+		allapecificdata = [abbreviation, date, opening, highest, lowest, closing, volume]
+		stockDict_alldata[line["證券代碼"].strip()] = allapecificdata
+		
+	else:
+		stockDict_alldata[line["證券代碼"].strip()][1].append(line["年月日"])
+		stockDict_alldata[line["證券代碼"].strip()][2].append(float(line["開盤價(元)"]))
+		stockDict_alldata[line["證券代碼"].strip()][3].append(float(line["最高價(元)"]))
+		stockDict_alldata[line["證券代碼"].strip()][4].append(float(line["最低價(元)"]))
+		stockDict_alldata[line["證券代碼"].strip()][5].append(float(line["收盤價(元)"]))
+		stockDict_alldata[line["證券代碼"].strip()][6].append(float(line["成交量(千股)"]))
+
+
+		
+stockDict_stock = dict() #儲存一家一家的公司，key是股票代碼，value是那間公司的「資料」（所以新建一個「stock」class, 這個class 儲存一家公司的資料）
+for key in stockDict_alldata.keys():
+	stockDict_stock[key] = stock(key)
 
 cal = BigFrame()
 cal.master.title("選股好簡單")
 cal.mainloop() 
+filehandler.close()
