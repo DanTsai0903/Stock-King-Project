@@ -243,10 +243,19 @@ class BigFrame(tk.Frame):
     #選擇乖離選項並顯示於以選條件-----------------------------------------------------------------------------
     
     def clickBtn股價大於周線(self):
+        for item in self.allcompany:
+            if stockDict_stock[item].closing <= 1.05 * stockDict_stock[item].MA5:
+                self.allcompany.remove(item)
         self.setclick條件Btn("股價大於周線5%")
     def clickBtn股價大於月線(self):
+        for item in self.allcompany:
+            if stockDict_stock[item].closing <= 1.1 * stockDict_stock[item].MA20:
+                self.allcompany.remove(item)
         self.setclick條件Btn("股價大於月線10%")
     def clickBtn股價大於季線(self):
+        for item in self.allcompany:
+            if stockDict_stock[item].closing <= 1.2 * stockDict_stock[item].MA60:
+                self.allcompany.remove(item)
         self.setclick條件Btn("股價大於季線20%")
         
     #選擇趨勢選項並顯示於以選條件-----------------------------------------------------------------------------
