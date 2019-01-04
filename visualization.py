@@ -20,6 +20,8 @@ class stock:
         self.MA5 = []#周線(5日線), a list
         self.MA20 = []#月線(20日線), a list
         self.MA60 = []#季線(60日線), a list
+        self.MA120 = []#半年線(120日線), a list
+
         c = 1 #counting
         for closings in self.closing:
             if c >= 5:
@@ -28,15 +30,22 @@ class stock:
                     self.MA20.append((sum(stockDict_alldata[code][5][(c - 20) : c]) / 20))
                     if c >= 60:
                         self.MA60.append((sum(stockDict_alldata[code][5][(c - 60) : c]) / 60))
+                        if c >= 120:
+                            self.MA120.append((sum(stockDict_alldata[code][5][(c - 120) : c]) / 120))
+                        else:
+                            self.MA120.append(None)
                     else:
                         self.MA60.append(None)
+                        self.MA120.append(None)
                 else:
                     self.MA20.append(None)
                     self.MA60.append(None)
+                    self.MA120.append(None)
             else:
                 self.MA5.append(None)
                 self.MA20.append(None)
                 self.MA60.append(None)
+                self.MA120.append(None)
             c += 1
         
         #計算KD值----------------------------------------------------------
@@ -283,13 +292,13 @@ class BigFrame(tk.Frame):
     def clickBtn均線多頭排列(self):
         self.setclick條件Btn("均線多頭排列")
         for item in self.allcompany:
-            if stockDict_stock[item].MA5[-1] <= stostockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1]<= stostockDict_stock[item].MA60[-1]:
+            if stockDict_stock[item].MA5[-1] <= stostockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1]<= stostockDict_stock[item].MA120[-1]:
                 self.allcompany.remove(item)
 
     def clickBtn均線空頭排列(self):
         self.setclick條件Btn("均線空頭排列")
         for item in self.allcompany:
-            if stockDict_stock[item].MA5[-1] >= stostockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] >= stostockDict_stock[item].MA60[-1]:
+            if stockDict_stock[item].MA5[-1] >= stostockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] >= stostockDict_stock[item].MA120[-1]:
                 self.allcompany.remove(item)
 
     def clickBtn週線大於月線(self):
