@@ -55,8 +55,10 @@ class stock:
 			preday = 200 - i #因為是從兩百天前開始算，所以要用200去減
 			
 			#未成熟隨機值
-			self.RSV = (stockDict_alldata[code][5][-preday] - min(stockDict_alldata[code][5][-preday-9 : -preday])) / (max(stockDict_alldata[code][5][-preday-9 : -preday]) - min(stockDict_alldata[code][5][-preday-9 : -preday])) * 100
-			
+			if -preday + 1 != 0:
+				self.RSV = (stockDict_alldata[code][5][-preday] - min(stockDict_alldata[code][5][-preday-9 : -preday+1])) / (max(stockDict_alldata[code][5][-preday-9 : -preday+1]) - min(stockDict_alldata[code][5][-preday-9 : -preday+1])) * 100
+			else:
+				self.RSV = (stockDict_alldata[code][5][-preday] - min(stockDict_alldata[code][5][-preday-9 :])) / (max(stockDict_alldata[code][5][-preday-9 :]) - min(stockDict_alldata[code][5][-preday-9 : ])) * 100
 			self.K = self.initialK * (2/3) + self.RSV * (1 / 3)#當日k值
 			self.D = self.initialD * (2/3) + self.K * (1 / 3)#當日d值
 			
@@ -152,7 +154,7 @@ class BigFrame(tk.Frame):
 		#-----------------------------------------------------------------------------------------
 		
 		
-	#創每個category的條件-------------------------------------------------------
+	#讓被選到的分類跑出來-------------------------------------------------------
 	def clickBtn突破(self):
 		f = tkFont.Font(self,size = 14 , family = "Courier New")
 		
@@ -246,12 +248,12 @@ class BigFrame(tk.Frame):
 
 
 
-	#創每個category的條件----------------------------------------------------------
+	#運算----------------------------------------------------------
 	def setclick條件Btn(self,條件):
 		self.全選股條件line[self.條件數量n].configure(text = str(條件))
 		self.條件數量n += 1
 		
-	#選擇突破選項並顯示於以選條件-------------------------------------------------------------------
+	#運算突破的部分-------------------------------------------------------------------
 	def clickBtn今日盤中突破5日新高(self):
 		self.setclick條件Btn("今日盤中突破5日新高")
 	def clickBtn今日收盤突破月線(self):
@@ -263,7 +265,7 @@ class BigFrame(tk.Frame):
 	def clickBtn今日收盤跌破季線(self):
 		self.setclick條件Btn("今日收盤跌破季線")
 
-	#選擇乖離選項並顯示於以選條件-----------------------------------------------------------------------------
+	#運算乖離的部分-----------------------------------------------------------------------------
 	
 	def clickBtn股價大於周線(self):
 		self.setclick條件Btn("股價大於周線5%")
@@ -272,7 +274,7 @@ class BigFrame(tk.Frame):
 	def clickBtn股價大於季線(self):
 		self.setclick條件Btn("股價大於季線20%")
 		
-	#選擇趨勢選項並顯示於以選條件-----------------------------------------------------------------------------
+	#運算趨勢的部分-----------------------------------------------------------------------------
 	
 	def clickBtn均線多頭排列(self):
 		self.setclick條件Btn("均線多頭排列")
@@ -302,7 +304,7 @@ class BigFrame(tk.Frame):
 	def clickBtn月收盤連兩周上漲(self):
 		self.setclick條件Btn("月收盤連兩周上漲")
 
-	#選擇技術指標選項並顯示於以選條件--------------------------------------------------------------------------
+	#運算技術指標的部分--------------------------------------------------------------------------
 	
 	def clickBtnKD黃金交叉日(self):
 		self.setclick條件Btn("KD黃金交叉(日)")
@@ -328,7 +330,7 @@ class BigFrame(tk.Frame):
 			self.allcompany.append(company)
 			
 
-			
+	
 
 
 #讀入檔案
