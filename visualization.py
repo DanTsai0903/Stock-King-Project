@@ -344,6 +344,21 @@ class BigFrame(tk.Frame):
 			if stockDict_stock[item].closing[-1] <= 1.2 * stockDict_stock[item].MA5[-1]:
 				self.allcompany.remove(item)
 		self.setclick條件Btn("股價大於季線20%")
+	def clickBtn股價小於周線(self):
+		for item in self.allcompany:
+			if stockDict_stock[item].closing[-1] >= 0.95 * stockDict_stock[item].MA5[-1]:
+				self.allcompany.remove(item)
+		self.setclick條件Btn("股價小於周線5%")
+	def clickBtn股價小於月線(self):
+		for item in self.allcompany:
+			if stockDict_stock[item].closing[-1] >= 0.9 * stockDict_stock[item].MA20[-1]:
+				self.allcompany.remove(item)
+		self.setclick條件Btn("股價小於月線10%")
+	def clickBtn股價小於季線(self):
+		for item in self.allcompany:
+			if stockDict_stock[item].closing[-1] >= 0.8 * stockDict_stock[item].MA5[-1]:
+				self.allcompany.remove(item)
+		self.setclick條件Btn("股價小於季線20%")
 		
 	#運算趨勢的部分-----------------------------------------------------------------------------
 	
