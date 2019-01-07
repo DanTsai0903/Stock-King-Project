@@ -68,7 +68,7 @@ class stock:
 
 		self.K = self.initialK
 		self.D = self.initialD
-		
+
 
 	def __str__(self):
 		return self.code
@@ -88,7 +88,7 @@ class BigFrame(tk.Frame):
 		self.allcompany = []
 		for company in stockDict_stock.keys():
 			self.allcompany.append(company)
-	
+
 	def createWidgets(self):
 		#創每個種類-----------------------------------------------------------------------------------------------------
 		f = tkFont.Font(size = 14 , family = "Courier New")
@@ -115,9 +115,17 @@ class BigFrame(tk.Frame):
 		self.lbl選股條件line6 = tk.Label(self,anchor = 'w',height = 1,width = 40 ,font = f,background = 'snow')
 		
 		
-		self.Btn開始選股 = tk.Button(self,text = "開始選股",height = 1,width = 16,font = f,background = 'BurlyWood')
+		self.Btn開始選股 = tk.Button(self,text = "開始選股",command = self.click開始選股Btn,height = 1,width = 16,font = f,background = 'BurlyWood')
 		self.Btn重設條件 = tk.Button(self,text = "重設條件",command = self.clickDelBtn,height = 1,width = 16,font = f,background = 'BurlyWood')
 		self.BtnQuit = tk.Button(self,text = "Quit!",command = self.quit,height = 1,width = 16,font = f,background = 'BurlyWood')
+		
+		self.lbl選股結果 = tk.Label(self,text = "選股結果",anchor = 'w',height = 1,width = 10 ,font = f,background = 'Beige')
+		self.scrollbar = tk.Scrollbar(self)
+		self.txt選股結果 = tk.Text(self,height = 20,width = 10,font = f,bg = "white",yscrollcommand = self.scrollbar.set)
+		self.scrollbar.configure(command = self.txt選股結果.yview)
+		self.lbl輸入代碼 = tk.Label(self,text = "輸入代碼",height = 1,width = 6)
+		self.txt輸入位置 = tk.Text(self,width = 4,height = 1,font = f,bg = "white" )
+		
 	   #設定位置------------------------------------------------------------------------------------
 		self.Btn突破.grid(row = 0,column = 0,columnspan = 3,sticky = tk.NE + tk.SW)
 		self.Btn乖離.grid(row = 0,column = 3,columnspan = 3,sticky = tk.NE + tk.SW)
@@ -132,17 +140,17 @@ class BigFrame(tk.Frame):
 		self.Lbl空行.grid(row = 6,column = 0,rowspan = 2,columnspan = 12,sticky = tk.NE + tk.SW)
 		
 		
-		self.lbl選股條件.grid(row = 10,column = 0,columnspan = 12,sticky = tk.E + tk.SW)
-		self.lbl選股條件line1.grid(row = 11,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
-		self.lbl選股條件line2.grid(row = 12,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
-		self.lbl選股條件line3.grid(row = 13,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
-		self.lbl選股條件line4.grid(row = 14,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
-		self.lbl選股條件line5.grid(row = 15,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
-		self.lbl選股條件line6.grid(row = 16,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
+		self.lbl選股條件.grid(row = 8,column = 0,columnspan = 12,sticky = tk.E + tk.SW)
+		self.lbl選股條件line1.grid(row = 9,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
+		self.lbl選股條件line2.grid(row = 10,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
+		self.lbl選股條件line3.grid(row = 11,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
+		self.lbl選股條件line4.grid(row = 12,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
+		self.lbl選股條件line5.grid(row = 13,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
+		self.lbl選股條件line6.grid(row = 14,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		
-		self.Btn開始選股.grid(row = 17,column = 0,columnspan = 6,sticky = tk.NE + tk.SW)
-		self.Btn重設條件.grid(row = 17,column = 6,columnspan = 6,sticky = tk.NE + tk.SW)
-		self.BtnQuit.grid(row = 18,column = 6,columnspan = 6,sticky = tk.NE + tk.SW)
+		self.Btn開始選股.grid(row = 15,column = 0,columnspan = 6,sticky = tk.NE + tk.SW)
+		self.Btn重設條件.grid(row = 15,column = 6,columnspan = 6,sticky = tk.NE + tk.SW)
+		self.BtnQuit.grid(row = 16,column = 6,columnspan = 6,sticky = tk.NE + tk.SW)
 
 		self.全選股條件line.append(self.lbl選股條件line1)
 		self.全選股條件line.append(self.lbl選股條件line2)
@@ -151,6 +159,11 @@ class BigFrame(tk.Frame):
 		self.全選股條件line.append(self.lbl選股條件line5)
 		self.全選股條件line.append(self.lbl選股條件line6)
 		
+		self.lbl選股結果.grid(row = 0,column = 12,columnspan = 7,sticky = tk.NE + tk.SW)
+		self.txt選股結果.grid(row = 1,column = 12,rowspan = 15,columnspan = 6,sticky = tk.NE + tk.SW)
+		self.scrollbar.grid(row = 1,column = 18,rowspan = 15,sticky = tk.NE + tk.SW)
+		self.lbl輸入代碼.grid(row = 16,column = 12,columnspan = 2,sticky = tk.NE + tk.SW)
+		self.txt輸入位置.grid(row = 16,column = 14,columnspan = 5,sticky = tk.NE + tk.SW)
 		#-----------------------------------------------------------------------------------------
 		
 		
@@ -190,7 +203,7 @@ class BigFrame(tk.Frame):
 		self.Btn股價大於月線 = tk.Button(self,text = "股價大於月線10%",command = self.clickBtn股價大於月線,width = 32,font = f,bg = "Antiquewhite")
 		self.Btn股價大於季線 = tk.Button(self,text = "股價大於季線20%",command = self.clickBtn股價大於季線,width = 32,font = f,bg = "Antiquewhite")
 		self.Lbl空行 = tk.Label(self,width = 32,font = f)
-		 
+
 		self.Btn股價大於周線.grid(row = 1,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.Btn股價大於月線.grid(row = 2,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
 		self.Btn股價大於季線.grid(row = 3,column = 0,columnspan = 12,sticky = tk.NE + tk.SW)
@@ -204,7 +217,7 @@ class BigFrame(tk.Frame):
 		self.Btn乖離.configure(bg = "Beige")
 		self.Btn趨勢.configure(bg = "Navajowhite")
 		self.Btn技術指標.configure(bg = "Beige")
-				
+		
 		self.Btn均線多頭排列 = tk.Button(self,text = "均線多頭排列",command = self.clickBtn均線多頭排列,width = 32,font = f,bg = "Antiquewhite")
 		self.Btn均線空頭排列 = tk.Button(self,text = "均線空頭排列",command = self.clickBtn均線空頭排列,width = 32,font = f,bg = "Antiquewhite")
 		self.Btn週線大於月線 = tk.Button(self,text = "週線大於月線",command = self.clickBtn週線大於月線,width = 32,font = f,bg = "Antiquewhite")
@@ -223,7 +236,7 @@ class BigFrame(tk.Frame):
 
 	def clickBtn技術指標(self):
 		f = tkFont.Font(self,size = 14 , family = "Courier New")
-		
+
 		self.Btn突破.configure(bg = "Beige")
 		self.Btn乖離.configure(bg = "Beige")
 		self.Btn趨勢.configure(bg = "Beige")
@@ -279,28 +292,29 @@ class BigFrame(tk.Frame):
 	def clickBtn均線多頭排列(self):
 		self.setclick條件Btn("均線多頭排列")
 		for item in self.allcompany:
-			if stockDict_stock[item].MA5[-1] <= stostockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] <= stostockDict_stock[item].MA120[-1]:
+			if stockDict_stock[item].MA5[-1] <= stockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] <= stockDict_stock[item].MA120[-1]:
 				self.allcompany.remove(item)
 
 	def clickBtn均線空頭排列(self):
 		self.setclick條件Btn("均線空頭排列")
 		for item in self.allcompany:
-			if stockDict_stock[item].MA5[-1] >= stostockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] >= stostockDict_stock[item].MA120[-1]:
+			if stockDict_stock[item].MA5[-1] >= stockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] >= stockDict_stock[item].MA120[-1]:
 				self.allcompany.remove(item)
 
 	def clickBtn週線大於月線(self):
 		self.setclick條件Btn("週線大於月線")
 		for item in self.allcompany:
-			if stockDict_stock[item].MA5[-1] <= stostockDict_stock[item].MA20[-1]:
+			if stockDict_stock[item].MA5[-1] <= stockDict_stock[item].MA20[-1]:
 				self.allcompany.remove(item)
 
 	def clickBtn月線大於季線(self):
 		self.setclick條件Btn("月線大於季線")
 		for item in self.allcompany:
-			if stockDict_stock[item].MA20[-1] <= stostockDict_stock[item].MA60[-1]:
+			if stockDict_stock[item].MA20[-1] <= stockDict_stock[item].MA60[-1]:
 				self.allcompany.remove(item)
 	def clickBtn週收盤連兩周上漲(self):
 		self.setclick條件Btn("週收盤連兩周上漲")
+		
 	def clickBtn月收盤連兩周上漲(self):
 		self.setclick條件Btn("月收盤連兩周上漲")
 
@@ -329,9 +343,25 @@ class BigFrame(tk.Frame):
 		for company in stockDict_stock.keys():
 			self.allcompany.append(company)
 			
+	def click開始選股Btn(self):
+		if self.條件數量n != 0:
+			for item in self.allcompany:
+				if len(stockDict_stock[item].abbreviation) == 3:
+					self.結果str = str(item) + str(stockDict_stock[item].abbreviation)
+					self.txt選股結果.insert(tk.END,self.結果str)
+				else:
+					self.結果str = str(item) + " " + str(stockDict_stock[item].abbreviation)
+					self.txt選股結果.insert(tk.END,self.結果str)
+		if self.條件數量n == 0:
+			self.結果str = "(無符合項目)"
+			self.txt選股結果.insert(END,self.結果str)
+				
+			
 
-	
 
+
+
+			
 
 #讀入檔案
 #輸入要讀的檔名
@@ -369,7 +399,7 @@ for line in reader2:
 		volume.append(float(line["成交量(千股)"]))
 		allapecificdata = [abbreviation, date, opening, highest, lowest, closing, volume]
 		stockDict_alldata[line["證券代碼"].strip()] = allapecificdata
-		
+
 	else:
 		d = line["年月日"].split("/")
 		stockDict_alldata[line["證券代碼"].strip()][1].append(datetime.date(int(d[0]), int(d[1]), int(d[2])))
@@ -380,7 +410,7 @@ for line in reader2:
 		stockDict_alldata[line["證券代碼"].strip()][6].append(float(line["成交量(千股)"]))
 
 
-		
+
 stockDict_stock = dict() #儲存一家一家的公司，key是股票代碼，value是那間公司的「資料」（所以新建一個「stock」class, 這個class 儲存一家公司的資料）
 for key in stockDict_alldata.keys():
 	stockDict_stock[key] = stock(key)
