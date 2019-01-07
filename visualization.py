@@ -293,8 +293,8 @@ class BigFrame(tk.Frame):
 	def clickBtn今日收盤突破月線(self):
 		self.setclick條件Btn("今日收盤突破月線")
 		for item in self.allcompany:
-			a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA20[-1]:
-			b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA20[-1]:
+			a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA20[-1]
+			b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA20[-1]
 			if a == b == True:
 				pass
 			else:
@@ -302,8 +302,8 @@ class BigFrame(tk.Frame):
 	def clickBtn今日收盤突破季線(self):
 		self.setclick條件Btn("今日收盤突破季線")
 		for item in self.allcompany:
-			a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA60[-1]:
-			b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA60[-1]:
+			a = stockDict_stock[item].opening[-1] < stostockDict_stock[item].MA60[-1]
+			b = stockDict_stock[item].closing[-1] > stostockDict_stock[item].MA60[-1]
 			if a == b == True:
 				pass
 			else:
@@ -311,8 +311,8 @@ class BigFrame(tk.Frame):
 	def clickBtn今日收盤跌破月線(self):
 		self.setclick條件Btn("今日收盤跌破月線")
 		for item in self.allcompany:
-			a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA20[-1]:
-			b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA20[-1]:
+			a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA20[-1]
+			b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA20[-1]
 			if a == b == True:
 				pass
 			else:
@@ -320,8 +320,8 @@ class BigFrame(tk.Frame):
 	def clickBtn今日收盤跌破季線(self):
 		self.setclick條件Btn("今日收盤跌破季線")
 		for item in self.allcompany:
-			a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA60[-1]:
-			b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA60[-1]:
+			a = stockDict_stock[item].opening[-1] > stostockDict_stock[item].MA60[-1]
+			b = stockDict_stock[item].closing[-1] < stostockDict_stock[item].MA60[-1]
 			if a == b == True:
 				pass
 			else:
