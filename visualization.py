@@ -2,7 +2,9 @@ import tkinter as tk
 import tkinter.font as tkFont
 import csv
 import datetime
-
+import matplotlib.pyplot as pp
+import numpy as np
+import matplotlib.gridspec as gridspec
 
 class stock:
 	def __init__(self, code):
@@ -121,13 +123,14 @@ class BigFrame(tk.Frame):
 		self.條件list = []#以選的條件放進list
 		self.條件數量n = 0#以選的條件數量
 
-		self.allcompany = []
+		self.stock_allcompany = dict()
 		for company in stockDict_stock.keys():
-			self.allcompany.append(company)
+			self.stock_allcompany[company] = True
 
 	def createWidgets(self):
 		#創每個種類-----------------------------------------------------------------------------------------------------
 		f = tkFont.Font(size = 14 , family = "Courier New")
+		f_for_輸入位置 = tkFont.Font(size = 10 , family = "Courier New")
 
 		self.Btn突破 = tk.Button(self,text = "突破",width = 8,command = self.clickBtn突破,font = f,bg = "Navajowhite")
 		self.Btn乖離 = tk.Button(self,text = "乖離",width = 8,command = self.clickBtn乖離,font = f,bg = "Beige")
@@ -142,7 +145,7 @@ class BigFrame(tk.Frame):
 		self.Lbl空行 = tk.Label(self,width = 32,font = f,bg = "snow")
 		
 		
-		self.lbl選股條件 = tk.Label(self,text = "選股條件",relief = "ridge",height = 1,width = 32,font = f ,bg = "beige")
+		self.lbl選股條件 = tk.Label(self,text = "選股條件(限6項)",relief = "ridge",height = 1,width = 32,font = f ,bg = "beige")
 		self.lbl選股條件line1 = tk.Label(self,anchor = 'w',height = 1,width = 40 ,font = f,background = 'snow')
 		self.lbl選股條件line2 = tk.Label(self,anchor = 'w',height = 1,width = 40 ,font = f,background = 'snow')
 		self.lbl選股條件line3 = tk.Label(self,anchor = 'w',height = 1,width = 40 ,font = f,background = 'snow')
@@ -151,18 +154,20 @@ class BigFrame(tk.Frame):
 		self.lbl選股條件line6 = tk.Label(self,anchor = 'w',height = 1,width = 40 ,font = f,background = 'snow')
 		
 
-		self.lbl選股結果 = tk.Label(self,text = "選股結果",anchor = 'w',height = 1,width = 10 ,font = f,background = 'Beige')
-		self.scrollbar = tk.Scrollbar(self)
-		self.txt選股結果 = tk.Text(self,height = 25,width = 10,font = f,bg = "white",yscrollcommand = self.scrollbar.set)
-		self.scrollbar.configure(command = self.txt選股結果.yview)
-		self.lbl輸入代碼 = tk.Label(self,text = "輸入代碼",height = 1,width = 6)
-		self.txt輸入位置 = tk.Text(self,width = 4,height = 1,font = f,bg = "white" )
-		
 
 		self.Btn開始選股 = tk.Button(self,text = "開始選股",command = self.click開始選股Btn,height = 1,width = 16,font = f,background = 'Gold')
 		self.Btn重設條件 = tk.Button(self,text = "重設條件",command = self.clickDelBtn,height = 1,width = 16,font = f,background = 'ivory')
 		self.BtnQuit = tk.Button(self,text = "Quit!",command = self.quit,height = 1,width = 32,font = f,background = 'Ivory')
 
+		
+		self.lbl選股結果 = tk.Label(self,text = "選股結果",anchor = 'w',height = 1,width = 10 ,font = f,background = 'Beige')
+		self.scrollbar = tk.Scrollbar(self)
+		self.txt選股結果 = tk.Text(self,height = 25,width = 26,font = f,bg = "white",yscrollcommand = self.scrollbar.set)
+		self.scrollbar.configure(command = self.txt選股結果.yview)
+		self.txt輸入位置 = tk.Text(self,width = 4,height = 1,font = f_for_輸入位置,bg = "white" )
+		self.Btn走勢圖 = tk.Button(self,text = "技術圖",command = self.click顯示,font = f_for_輸入位置,height = 1,width = 6)
+		self.txt輸入位置.insert(tk.END,"輸入代碼")
+		
 	   #設定位置------------------------------------------------------------------------------------
 		self.Btn突破.grid(row = 0,column = 0,columnspan = 3,sticky = tk.NE + tk.SW)
 		self.Btn乖離.grid(row = 0,column = 3,columnspan = 3,sticky = tk.NE + tk.SW)
@@ -200,11 +205,11 @@ class BigFrame(tk.Frame):
 		self.lbl選股結果.grid(row = 0,column = 12,columnspan = 7,sticky = tk.NE + tk.SW)
 		self.txt選股結果.grid(row = 1,column = 12,rowspan = 15,columnspan = 6,sticky = tk.NE + tk.SW)
 		self.scrollbar.grid(row = 1,column = 18,rowspan = 15,sticky = tk.NE + tk.SW)
-		self.lbl輸入代碼.grid(row = 16,column = 12,columnspan = 2,sticky = tk.NE + tk.SW)
-		self.txt輸入位置.grid(row = 16,column = 14,columnspan = 5,sticky = tk.NE + tk.SW)
+		self.Btn走勢圖.grid(row = 16,column = 17,columnspan = 2,sticky = tk.NE + tk.SW)
+		self.txt輸入位置.grid(row = 16,column = 12,columnspan = 5,sticky = tk.NE + tk.SW)
 		#-----------------------------------------------------------------------------------------
-		
-		
+
+
 	#讓被選到的分類跑出來-------------------------------------------------------
 	def clickBtn突破(self):
 		f = tkFont.Font(self,size = 14 , family = "Courier New")
@@ -306,179 +311,193 @@ class BigFrame(tk.Frame):
 
 	#運算----------------------------------------------------------
 	def setclick條件Btn(self,條件):
-		self.全選股條件line[self.條件數量n].configure(text = str(條件))
+		self.全選股條件line[self.條件數量n].configure(text = str(self.條件數量n+1) + ". " + str(條件))
 		self.條件數量n += 1
 		
 	#運算突破的部分-------------------------------------------------------------------
 	def clickBtn今日盤中突破5日新高(self):
 		self.setclick條件Btn("今日盤中突破5日新高")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if max(stockDict_stock[item].highest[-5:]) != stockDict_stock[item].highest[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtn今日收盤突破月線(self):
 		self.setclick條件Btn("今日收盤突破月線")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			a = stockDict_stock[item].opening[-1] < stockDict_stock[item].MA20[-1]
 			b = stockDict_stock[item].closing[-1] > stockDict_stock[item].MA20[-1]
 			if a == b == True:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtn今日收盤突破季線(self):
 		self.setclick條件Btn("今日收盤突破季線")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			a = stockDict_stock[item].opening[-1] < stockDict_stock[item].MA60[-1]
 			b = stockDict_stock[item].closing[-1] > stockDict_stock[item].MA60[-1]
 			if a == b == True:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtn今日收盤跌破月線(self):
 		self.setclick條件Btn("今日收盤跌破月線")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			a = stockDict_stock[item].opening[-1] > stockDict_stock[item].MA20[-1]
 			b = stockDict_stock[item].closing[-1] < stockDict_stock[item].MA20[-1]
 			if a == b == True:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtn今日收盤跌破季線(self):
 		self.setclick條件Btn("今日收盤跌破季線")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			a = stockDict_stock[item].opening[-1] > stockDict_stock[item].MA60[-1]
 			b = stockDict_stock[item].closing[-1] < stockDict_stock[item].MA60[-1]
 			if a == b == True:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 
 	#運算乖離的部分-----------------------------------------------------------------------------
 	
 	def clickBtn股價大於周線(self):
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if stockDict_stock[item].closing[-1] <= 1.05 * stockDict_stock[item].MA5[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價大於周線5%")
+		
 	def clickBtn股價大於月線(self):
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if stockDict_stock[item].closing[-1] <= 1.1 * stockDict_stock[item].MA20[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價大於月線10%")
+		
 	def clickBtn股價大於季線(self):
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if stockDict_stock[item].closing[-1] <= 1.2 * stockDict_stock[item].MA5[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價大於季線20%")
+		
 	def clickBtn股價小於周線(self):
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if stockDict_stock[item].closing[-1] >= 0.95 * stockDict_stock[item].MA5[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價小於周線5%")
+		
 	def clickBtn股價小於月線(self):
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if stockDict_stock[item].closing[-1] >= 0.9 * stockDict_stock[item].MA20[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價小於月線10%")
+		
 	def clickBtn股價小於季線(self):
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if stockDict_stock[item].closing[-1] >= 0.8 * stockDict_stock[item].MA5[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價小於季線20%")
 		
 	#運算趨勢的部分-----------------------------------------------------------------------------
 	
 	def clickBtn均線多頭排列(self):
 		self.setclick條件Btn("均線多頭排列")
-		print(self.allcompany)
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if stockDict_stock[item].MA5[-1] <= stockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] <= stockDict_stock[item].MA120[-1]:
-				print(item,stockDict_stock[item].MA5[-1],stockDict_stock[item].MA20[-1],stockDict_stock[item].MA120[-1])
-				self.allcompany.remove(item)
-			
+				self.stock_allcompany[item] = False
 
 	def clickBtn均線空頭排列(self):
 		self.setclick條件Btn("均線空頭排列")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if stockDict_stock[item].MA5[-1] >= stockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] >= stockDict_stock[item].MA120[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 
 	def clickBtn週線大於月線(self):
 		self.setclick條件Btn("週線大於月線")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if stockDict_stock[item].MA5[-1] <= stockDict_stock[item].MA20[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtn月線大於季線(self):
 		self.setclick條件Btn("月線大於季線")
-		for item in self.allcompany:
+		for item in	 self.stock_allcompany.keys():
 			if stockDict_stock[item].MA20[-1] <= stockDict_stock[item].MA60[-1]:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtn週收盤連兩周上漲(self):
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if (stockDict_stock[item].closing[-1] <= stockDict_stock[item].closing[-5]) or (stockDict_stock[item].closing[-6] <= stockDict_stock[item].closing[-10]):
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("週收盤連兩周上漲")
 		
+		
 	def clickBtn月收盤連兩周上漲(self):
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			if (stockDict_stock[item].closing[-1] <= stockDict_stock[item].closing[-20]) or (stockDict_stock[item].closing[-21] <= stockDict_stock[item].closing[-40]):
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("月收盤連兩周上漲")
 
 	#「技術指標」部分的運算--------------------------------------------------------------------------
 	def clickBtnKD黃金交叉日(self):
 		self.setclick條件Btn("KD黃金交叉(日)")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			p = stockDict_stock[item].K[-1] > stockDict_stock[item].D[-1]
 			q = stockDict_stock[item].K[-2] < stockDict_stock[item].D[-2]
 			if p and q:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtnKD黃金交叉週(self):
 		self.setclick條件Btn("KD黃金交叉(週)")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			p = stockDict_stock[item].Kweek[-1] > stockDict_stock[item].Dweek[-1]
 			q = stockDict_stock[item].Kweek[-2] < stockDict_stock[item].Dweek[-2]
 			if p and q:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtnKD黃金交叉月(self):
 		self.setclick條件Btn("KD黃金交叉(月)")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			p = stockDict_stock[item].Kmonth[-1] > stockDict_stock[item].Dmonth[-1]
 			q = stockDict_stock[item].Kmonth[-2] < stockDict_stock[item].Dmonth[-2]
 			if p and q:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtnKD死亡交叉日(self):
 		self.setclick條件Btn("KD死亡交叉(日)")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			p = stockDict_stock[item].K[-1] < stockDict_stock[item].D[-1]
 			q = stockDict_stock[item].K[-2] > stockDict_stock[item].D[-2]
 			if p and q:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtnKD死亡交叉週(self):
 		self.setclick條件Btn("KD死亡交叉(週)")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			p = stockDict_stock[item].Kweek[-1] < stockDict_stock[item].Dweek[-1]
 			q = stockDict_stock[item].Kweek[-2] > stockDict_stock[item].Dweek[-2]
 			if p and q:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
+				
 	def clickBtnKD死亡交叉月(self):
 		self.setclick條件Btn("KD死亡交叉(月)")
-		for item in self.allcompany:
+		for item in self.stock_allcompany.keys():
 			p = stockDict_stock[item].Kmonth[-1] < stockDict_stock[item].Dmonth[-1]
 			q = stockDict_stock[item].Kmonth[-2] > stockDict_stock[item].Dmonth[-2]
 			if p and q:
 				pass
 			else:
-				self.allcompany.remove(item)
+				self.stock_allcompany[item] = False
 
 	#刪除條件的函數--------------------------------------------------------------
 	def clickDelBtn(self):
@@ -486,25 +505,106 @@ class BigFrame(tk.Frame):
 			條件.configure(text = "")
 		self.條件數量n = 0
 	
-		self.allcompany = []
+		self.stock_allcompany = dict()
 		for company in stockDict_stock.keys():
-			self.allcompany.append(company)
+			self.stock_allcompany[company] = True
 			
 	def click開始選股Btn(self):
 		self.txt選股結果.delete('1.0', tk.END)
+		self.txt輸入位置.delete('1.0', tk.END)
+		self.txt輸入位置.insert(tk.END,"輸入代碼")
+		
 		if self.條件數量n != 0:
-			if len(self.allcompany) == 0:
-				self.結果str = "(無符合項目)"
+			if True not in self.stock_allcompany.values():
+				self.結果str = " "*7 + "(無符合項目)"
 				self.txt選股結果.insert(tk.END,self.結果str)
 			else:
-				for item in self.allcompany:
-					if len(stockDict_stock[item].abbreviation) == 3:
-						self.結果str = str(item) + str(stockDict_stock[item].abbreviation)
+				for item in self.stock_allcompany.keys():
+					if self.stock_allcompany[item] == True:
+						self.結果str_code = '%-7.0d' %int(item)
+						self.結果str_abbrevatin = stockDict_stock[item].abbreviation + " " * (19-chinese(stockDict_stock[item].abbreviation))
+						self.結果str = self.結果str_code + self.結果str_abbrevatin
+						
 						self.txt選股結果.insert(tk.END,self.結果str)
-					else:
-						self.結果str = str(item) + " " + str(stockDict_stock[item].abbreviation) + " "
-						self.txt選股結果.insert(tk.END,self.結果str)
-				
+	def click顯示(self):
+		test =  str(self.txt輸入位置.get('1.0',tk.END)).strip()#inputting the code of the company
+		if test in stockDict_stock.keys():
+			fig = pp.figure() #creating a graph
+			fig.text(0.37, 0.95, "Recent Trend of " + test, size = "large", color = "black")
+			fig.canvas.set_window_title(stockDict_stock[test].abbreviation) 
+			gs1 = gridspec.GridSpec(3, 1, height_ratios=[3, 1, 1]) #setting the ratio of height to be 3:1:1
+		
+			#converting lists to np.arrays
+			npdate = np.array(stockDict_stock[test].date)
+			npclosing = np.array(stockDict_stock[test].closing)
+			npMA20 = np.array(stockDict_stock[test].MA20)
+			npMA60 = np.array(stockDict_stock[test].MA60)
+			npMA120 = np.array(stockDict_stock[test].MA120)
+			npK = np.array(stockDict_stock[test].K)
+			npD = np.array(stockDict_stock[test].D)
+			npvolume = np.array(stockDict_stock[test].volume)
+
+			#the first part of graph -- price, including Moving Averages
+			pp.subplot(gs1[0])
+			pp.plot(npdate, npclosing, color = "#706666", label = "Price")
+			pp.plot(npdate, npMA20, color = "#2020BB", label = "Average Price in 20 Days")
+			pp.plot(npdate, npMA60, color = "#FF9900", label = "Average Price in 60 Days")
+			pp.plot(npdate, npMA120, color = "#60DD40", label = "Average Price in 120 Days")
+			pp.tick_params(
+				axis='x',          # changes apply to the x-axis
+				which='major',      # both major and minor ticks are affected
+				bottom=True,      # ticks along the bottom edge are off
+				top=False,         # ticks along the top edge are off
+				labelbottom=False,
+				direction = "in")
+			pp.legend(loc = "upper left")
+			pp.ylabel("Price")
+			pp.xlim(stockDict_stock[test].date[0], stockDict_stock[test].date[-1])
+			pp.ylim(min(stockDict_stock[test].closing) * 0.99, max(stockDict_stock[test].closing) * 1.01) #讓上下界線看起來更寬裕一點
+
+			#the second part of graph -- KD
+			pp.subplot(gs1[1])
+			pp.plot(npdate, npK, color = "#CC4444", label = "K(Day)")
+			pp.plot(npdate, npD, color = "#33CC33", label = "D(Day)")
+			pp.tick_params(
+				axis='x',          # changes apply to the x-axis
+				which='major',      # both major and minor ticks are affected
+				bottom=True,      # ticks along the bottom edge are off
+				top=False,         # ticks along the top edge are off
+				labelbottom=False, 
+				direction = "in")
+			pp.legend(loc = "upper left")
+			pp.ylabel("KD(Day)")
+			pp.xlim(stockDict_stock[test].date[0], stockDict_stock[test].date[-1])
+			pp.ylim(0, 100)
+
+			#the third part of graph -- volume
+			pp.subplot(gs1[2])
+			pp.bar(npdate, npvolume, color = "#2055AA", width = 1)
+			pp.tick_params(
+				axis='x',          # changes apply to the x-axis
+				which='major',      # both major and minor ticks are affected
+				bottom=True,      # ticks along the bottom edge are off
+				top=False,         # ticks along the top edge are off
+				labelsize = 6.4)        
+			pp.legend(loc = "lower right")
+			pp.xlabel("Date")
+			pp.ylabel("volume\n(in 1000 stocks)")
+			pp.xlim(stockDict_stock[test].date[0], stockDict_stock[test].date[-1])
+			pp.ylim(0, max(stockDict_stock[test].volume))
+
+			pp.show()
+		
+
+#算含中文字串的長度
+def chinese(data):
+	count = 0
+	for s in data:
+		if ord(s) > 127:
+			count += 2
+		else:
+			count += 1
+	return count
 
 #讀入檔案
 #輸入要讀的檔名
@@ -562,4 +662,3 @@ cal = BigFrame()
 cal.master.title("選股好簡單")
 cal.mainloop() 
 filehandler.close()
-
