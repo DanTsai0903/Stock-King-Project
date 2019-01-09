@@ -61,7 +61,7 @@ class stock:
 		else:
 			self.RSV = 50
 		self.K.append(self.RSV / 3 + 100 / 3)
-		self.D.append(self.K[0] / 3 + 100 / 3)–
+		self.D.append(self.K[0] / 3 + 100 / 3)
 
 		for i in range(1, len(self.closing)):
 			if self.highest[i] != self.lowest[i]:
@@ -419,7 +419,8 @@ class BigFrame(tk.Frame):
 			try:
 				if stockDict_stock[item].closing[-1] >= 0.9 * stockDict_stock[item].MA20[-1]:
 					self.stock_allcompany[item] = False
-			self.stock_allcompany[item] = False
+			except:
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價小於月線10%")
 		
 	def clickBtn股價小於季線(self):
@@ -427,7 +428,8 @@ class BigFrame(tk.Frame):
 			try:
 				if stockDict_stock[item].closing[-1] >= 0.8 * stockDict_stock[item].MA5[-1]:
 					self.stock_allcompany[item] = False
-			self.stock_allcompany[item] = False
+			except:
+				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價小於季線20%")
 		
 	#運算趨勢的部分-----------------------------------------------------------------------------
