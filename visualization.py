@@ -61,7 +61,7 @@ class stock:
 		else:
 			self.RSV = 50
 		self.K.append(self.RSV / 3 + 100 / 3)
-		self.D.append(self.K[0] / 3 + 100 / 3)–
+		self.D.append(self.K[0] / 3 + 100 / 3)
 
 		for i in range(1, len(self.closing)):
 			if self.highest[i] != self.lowest[i]:
@@ -333,47 +333,62 @@ class BigFrame(tk.Frame):
 	def clickBtn今日盤中突破5日新高(self):
 		self.setclick條件Btn("今日盤中突破5日新高")
 		for item in self.stock_allcompany.keys():
-			if max(stockDict_stock[item].highest[-5:]) != stockDict_stock[item].highest[-1]:
+			try:
+				if max(stockDict_stock[item].highest[-5:]) != stockDict_stock[item].highest[-1]:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 				
 	def clickBtn今日收盤突破月線(self):
 		self.setclick條件Btn("今日收盤突破月線")
 		for item in self.stock_allcompany.keys():
-			a = stockDict_stock[item].opening[-1] < stockDict_stock[item].MA20[-1]
-			b = stockDict_stock[item].closing[-1] > stockDict_stock[item].MA20[-1]
-			if a == b == True:
-				pass
-			else:
+			try:
+				a = stockDict_stock[item].opening[-1] < stockDict_stock[item].MA20[-1]
+				b = stockDict_stock[item].closing[-1] > stockDict_stock[item].MA20[-1]
+				if a == b == True:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 				
 	def clickBtn今日收盤突破季線(self):
 		self.setclick條件Btn("今日收盤突破季線")
 		for item in self.stock_allcompany.keys():
-			a = stockDict_stock[item].opening[-1] < stockDict_stock[item].MA60[-1]
-			b = stockDict_stock[item].closing[-1] > stockDict_stock[item].MA60[-1]
-			if a == b == True:
-				pass
-			else:
+			try:
+				a = stockDict_stock[item].opening[-1] < stockDict_stock[item].MA60[-1]
+				b = stockDict_stock[item].closing[-1] > stockDict_stock[item].MA60[-1]
+				if a == b == True:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 				
 	def clickBtn今日收盤跌破月線(self):
 		self.setclick條件Btn("今日收盤跌破月線")
 		for item in self.stock_allcompany.keys():
-			a = stockDict_stock[item].opening[-1] > stockDict_stock[item].MA20[-1]
-			b = stockDict_stock[item].closing[-1] < stockDict_stock[item].MA20[-1]
-			if a == b == True:
-				pass
-			else:
+			try:
+				a = stockDict_stock[item].opening[-1] > stockDict_stock[item].MA20[-1]
+				b = stockDict_stock[item].closing[-1] < stockDict_stock[item].MA20[-1]
+				if a == b == True:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 				
 	def clickBtn今日收盤跌破季線(self):
 		self.setclick條件Btn("今日收盤跌破季線")
 		for item in self.stock_allcompany.keys():
-			a = stockDict_stock[item].opening[-1] > stockDict_stock[item].MA60[-1]
-			b = stockDict_stock[item].closing[-1] < stockDict_stock[item].MA60[-1]
-			if a == b == True:
-				pass
-			else:
+			try:
+				a = stockDict_stock[item].opening[-1] > stockDict_stock[item].MA60[-1]
+				b = stockDict_stock[item].closing[-1] < stockDict_stock[item].MA60[-1]
+				if a == b == True:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 
 	#運算乖離的部分-----------------------------------------------------------------------------
@@ -490,61 +505,79 @@ class BigFrame(tk.Frame):
 	def clickBtnKD黃金交叉日(self):
 		self.setclick條件Btn("KD黃金交叉(日)")
 		for item in self.stock_allcompany.keys():
-			p = stockDict_stock[item].K[-1] > stockDict_stock[item].D[-1]
-			q = stockDict_stock[item].K[-2] < stockDict_stock[item].D[-2]
-			if p and q:
-				pass
-			else:
+			try:
+				p = stockDict_stock[item].K[-1] > stockDict_stock[item].D[-1]
+				q = stockDict_stock[item].K[-2] < stockDict_stock[item].D[-2]
+				if p and q:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 				
 	def clickBtnKD黃金交叉週(self):
 		self.setclick條件Btn("KD黃金交叉(週)")
 		for item in self.stock_allcompany.keys():
-			p = stockDict_stock[item].Kweek[-1] > stockDict_stock[item].Dweek[-1]
-			q = stockDict_stock[item].Kweek[-2] < stockDict_stock[item].Dweek[-2]
-			if p and q:
-				pass
-			else:
+			try:
+				p = stockDict_stock[item].Kweek[-1] > stockDict_stock[item].Dweek[-1]
+				q = stockDict_stock[item].Kweek[-2] < stockDict_stock[item].Dweek[-2]
+				if p and q:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 				
 	def clickBtnKD黃金交叉月(self):
 		self.setclick條件Btn("KD黃金交叉(月)")
 		for item in self.stock_allcompany.keys():
-			p = stockDict_stock[item].Kmonth[-1] > stockDict_stock[item].Dmonth[-1]
-			q = stockDict_stock[item].Kmonth[-2] < stockDict_stock[item].Dmonth[-2]
-			if p and q:
-				pass
-			else:
+			try:
+				p = stockDict_stock[item].Kmonth[-1] > stockDict_stock[item].Dmonth[-1]
+				q = stockDict_stock[item].Kmonth[-2] < stockDict_stock[item].Dmonth[-2]
+				if p and q:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 				
 	def clickBtnKD死亡交叉日(self):
 		self.setclick條件Btn("KD死亡交叉(日)")
 		for item in self.stock_allcompany.keys():
-			p = stockDict_stock[item].K[-1] < stockDict_stock[item].D[-1]
-			q = stockDict_stock[item].K[-2] > stockDict_stock[item].D[-2]
-			if p and q:
-				pass
-			else:
+			try:
+				p = stockDict_stock[item].K[-1] < stockDict_stock[item].D[-1]
+				q = stockDict_stock[item].K[-2] > stockDict_stock[item].D[-2]
+				if p and q:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 				
 	def clickBtnKD死亡交叉週(self):
 		self.setclick條件Btn("KD死亡交叉(週)")
 		for item in self.stock_allcompany.keys():
-			p = stockDict_stock[item].Kweek[-1] < stockDict_stock[item].Dweek[-1]
-			q = stockDict_stock[item].Kweek[-2] > stockDict_stock[item].Dweek[-2]
-			if p and q:
-				pass
-			else:
+			try:
+				p = stockDict_stock[item].Kweek[-1] < stockDict_stock[item].Dweek[-1]
+				q = stockDict_stock[item].Kweek[-2] > stockDict_stock[item].Dweek[-2]
+				if p and q:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 				
 	def clickBtnKD死亡交叉月(self):
 		self.setclick條件Btn("KD死亡交叉(月)")
 		for item in self.stock_allcompany.keys():
-			p = stockDict_stock[item].Kmonth[-1] < stockDict_stock[item].Dmonth[-1]
-			q = stockDict_stock[item].Kmonth[-2] > stockDict_stock[item].Dmonth[-2]
-			if p and q:
-				pass
-			else:
+			try:
+				p = stockDict_stock[item].Kmonth[-1] < stockDict_stock[item].Dmonth[-1]
+				q = stockDict_stock[item].Kmonth[-2] > stockDict_stock[item].Dmonth[-2]
+				if p and q:
+					pass
+				else:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 
 	#刪除條件的函數--------------------------------------------------------------
@@ -573,7 +606,7 @@ class BigFrame(tk.Frame):
 						self.結果str_abbreviation = stockDict_stock[item].abbreviation + " " * (19-chinese(stockDict_stock[item].abbreviation))
 						self.結果str = self.結果str_code + self.結果str_abbreviation
 						self.txt選股結果.insert(tk.END,self.結果str)
-						
+
 	def click顯示(self):
 		test =  str(self.txt輸入位置.get('1.0',tk.END)).strip()#inputting the code of the company
 		if test in stockDict_stock.keys():
