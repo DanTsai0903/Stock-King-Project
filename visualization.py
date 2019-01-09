@@ -61,7 +61,7 @@ class stock:
 		else:
 			self.RSV = 50
 		self.K.append(self.RSV / 3 + 100 / 3)
-		self.D.append(self.K[0] / 3 + 100 / 3)
+		self.D.append(self.K[0] / 3 + 100 / 3)–
 
 		for i in range(1, len(self.closing)):
 			if self.highest[i] != self.lowest[i]:
@@ -380,38 +380,54 @@ class BigFrame(tk.Frame):
 	
 	def clickBtn股價大於周線(self):
 		for item in self.stock_allcompany.keys():
-			if stockDict_stock[item].closing[-1] <= 1.05 * stockDict_stock[item].MA5[-1]:
+			try:
+				if stockDict_stock[item].closing[-1] <= 1.05 * stockDict_stock[item].MA5[-1]:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價大於周線5%")
 		
 	def clickBtn股價大於月線(self):
 		for item in self.stock_allcompany.keys():
-			if stockDict_stock[item].closing[-1] <= 1.1 * stockDict_stock[item].MA20[-1]:
+			try:
+				if stockDict_stock[item].closing[-1] <= 1.1 * stockDict_stock[item].MA20[-1]:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價大於月線10%")
 		
 	def clickBtn股價大於季線(self):
 		for item in self.stock_allcompany.keys():
-			if stockDict_stock[item].closing[-1] <= 1.2 * stockDict_stock[item].MA5[-1]:
+			try:
+				if stockDict_stock[item].closing[-1] <= 1.2 * stockDict_stock[item].MA5[-1]:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價大於季線20%")
 		
 	def clickBtn股價小於周線(self):
 		for item in self.stock_allcompany.keys():
-			if stockDict_stock[item].closing[-1] >= 0.95 * stockDict_stock[item].MA5[-1]:
+			try:
+				if stockDict_stock[item].closing[-1] >= 0.95 * stockDict_stock[item].MA5[-1]:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價小於周線5%")
 		
 	def clickBtn股價小於月線(self):
 		for item in self.stock_allcompany.keys():
-			if stockDict_stock[item].closing[-1] >= 0.9 * stockDict_stock[item].MA20[-1]:
-				self.stock_allcompany[item] = False
+			try:
+				if stockDict_stock[item].closing[-1] >= 0.9 * stockDict_stock[item].MA20[-1]:
+					self.stock_allcompany[item] = False
+			self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價小於月線10%")
 		
 	def clickBtn股價小於季線(self):
 		for item in self.stock_allcompany.keys():
-			if stockDict_stock[item].closing[-1] >= 0.8 * stockDict_stock[item].MA5[-1]:
-				self.stock_allcompany[item] = False
+			try:
+				if stockDict_stock[item].closing[-1] >= 0.8 * stockDict_stock[item].MA5[-1]:
+					self.stock_allcompany[item] = False
+			self.stock_allcompany[item] = False
 		self.setclick條件Btn("股價小於季線20%")
 		
 	#運算趨勢的部分-----------------------------------------------------------------------------
@@ -419,39 +435,56 @@ class BigFrame(tk.Frame):
 	def clickBtn均線多頭排列(self):
 		self.setclick條件Btn("均線多頭排列")
 		for item in self.stock_allcompany.keys():
-			if stockDict_stock[item].MA5[-1] <= stockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] <= stockDict_stock[item].MA120[-1]:
+			try:
+				if stockDict_stock[item].MA5[-1] <= stockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] <= stockDict_stock[item].MA120[-1]:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 
 	def clickBtn均線空頭排列(self):
 		self.setclick條件Btn("均線空頭排列")
 		for item in self.stock_allcompany.keys():
-			if stockDict_stock[item].MA5[-1] >= stockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] >= stockDict_stock[item].MA120[-1]:
+			try:
+				if stockDict_stock[item].MA5[-1] >= stockDict_stock[item].MA20[-1] or stockDict_stock[item].MA20[-1] >= stockDict_stock[item].MA120[-1]:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
 
 	def clickBtn週線大於月線(self):
 		self.setclick條件Btn("週線大於月線")
 		for item in self.stock_allcompany.keys():
-			if stockDict_stock[item].MA5[-1] <= stockDict_stock[item].MA20[-1]:
+			try:
+				if stockDict_stock[item].MA5[-1] <= stockDict_stock[item].MA20[-1]:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
-				
+
 	def clickBtn月線大於季線(self):
 		self.setclick條件Btn("月線大於季線")
 		for item in	 self.stock_allcompany.keys():
-			if stockDict_stock[item].MA20[-1] <= stockDict_stock[item].MA60[-1]:
+			try:
+				if stockDict_stock[item].MA20[-1] <= stockDict_stock[item].MA60[-1]:
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
-				
+
 	def clickBtn週收盤連兩周上漲(self):
+		self.setclick條件Btn("週收盤連兩周上漲")		
 		for item in self.stock_allcompany.keys():
-			if (stockDict_stock[item].closing[-1] <= stockDict_stock[item].closing[-5]) or (stockDict_stock[item].closing[-6] <= stockDict_stock[item].closing[-10]):
+			try:
+				if (stockDict_stock[item].closing[-1] <= stockDict_stock[item].closing[-5]) or (stockDict_stock[item].closing[-6] <= stockDict_stock[item].closing[-10]):
+					self.stock_allcompany[item] = False
+			except:
 				self.stock_allcompany[item] = False
-		self.setclick條件Btn("週收盤連兩周上漲")
-		
 		
 	def clickBtn月收盤連兩周上漲(self):
-		for item in self.stock_allcompany.keys():
-			if (stockDict_stock[item].closing[-1] <= stockDict_stock[item].closing[-20]) or (stockDict_stock[item].closing[-21] <= stockDict_stock[item].closing[-40]):
-				self.stock_allcompany[item] = False
 		self.setclick條件Btn("月收盤連兩周上漲")
+		for item in self.stock_allcompany.keys():
+			try:
+				if (stockDict_stock[item].closing[-1] <= stockDict_stock[item].closing[-20]) or (stockDict_stock[item].closing[-21] <= stockDict_stock[item].closing[-40]):
+					self.stock_allcompany[item] = False
+			except:
+				self.stock_allcompany[item] = False
 
 	#「技術指標」部分的運算--------------------------------------------------------------------------
 	def clickBtnKD黃金交叉日(self):
@@ -537,10 +570,10 @@ class BigFrame(tk.Frame):
 				for item in self.stock_allcompany.keys():
 					if self.stock_allcompany[item] == True:
 						self.結果str_code = '%-7.0d' %int(item)
-						self.結果str_abbrevatin = stockDict_stock[item].abbreviation + " " * (19-chinese(stockDict_stock[item].abbreviation))
-						self.結果str = self.結果str_code + self.結果str_abbrevatin
-						
+						self.結果str_abbreviation = stockDict_stock[item].abbreviation + " " * (19-chinese(stockDict_stock[item].abbreviation))
+						self.結果str = self.結果str_code + self.結果str_abbreviation
 						self.txt選股結果.insert(tk.END,self.結果str)
+						
 	def click顯示(self):
 		test =  str(self.txt輸入位置.get('1.0',tk.END)).strip()#inputting the code of the company
 		if test in stockDict_stock.keys():
