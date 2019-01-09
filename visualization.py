@@ -56,7 +56,10 @@ class stock:
 		self.D = [] 
 
 		#(第一個日ＫＤ值)
-		self.RSV = (self.closing[0] - self.lowest[0]) / (self.highest[0] - self.lowest[0]) * 100
+		if self.highest[0] != self.lowest[0]:
+			self.RSV = (self.closing[0] - self.lowest[0]) / (self.highest[0] - self.lowest[0]) * 100
+		else:
+			self.RSV = 50
 		self.K.append(self.RSV / 3 + 100 / 3)
 		self.D.append(self.K[0] / 3 + 100 / 3)
 
@@ -76,12 +79,18 @@ class stock:
 			self.Dweek.append(None)
 
 		#(第一個週ＫＤ值)
-		self.RSVweek = (self.closing[0] - min(self.lowest[0 : 5])) / (max(self.highest[0 : 5]) - min(self.lowest[0 : 5])) * 100
+		if max(self.highest[0 : 5]) != min(self.lowest[0 : 5]):
+			self.RSVweek = (self.closing[0] - min(self.lowest[0 : 5])) / (max(self.highest[0 : 5]) - min(self.lowest[0 : 5])) * 100
+		else:
+			self.RSVweek = 50
 		self.Kweek.append(self.RSVweek / 3 + 100 / 3)
 		self.Dweek.append(self.Kweek[4] / 3 + 100 / 3)
 
 		for i in range(5, len(self.closing)):
-			self.RSVweek = (self.closing[i] - min(self.lowest[(i - 4) : (i + 1)])) / (max(self.highest[(i - 4) : (i + 1)]) - min(self.lowest[(i - 4) : (i + 1)])) * 100
+			if max(self.highest[(i - 4) : (i + 1)]) != min(self.lowest[(i - 4) : (i + 1)]):
+				self.RSVweek = (self.closing[i] - min(self.lowest[(i - 4) : (i + 1)])) / (max(self.highest[(i - 4) : (i + 1)]) - min(self.lowest[(i - 4) : (i + 1)])) * 100
+			else:
+				self.RSVweek = self.Kweek[i - 1]
 			self.Kweek.append(self.RSVweek / 3 + self.Kweek[i - 1] * 2 / 3)
 			self.Dweek.append(self.Kweek[i] / 3 + self.Dweek[i - 1] * 2 / 3)
 
@@ -96,12 +105,18 @@ class stock:
 			self.Dmonth.append(None)
 
 		#(第一個月ＫＤ值)
-		self.RSVmonth = (self.closing[0] - min(self.lowest[0 : 20])) / (max(self.highest[0 : 20]) - min(self.lowest[0 : 20])) * 100
+		if max(self.highest[0 : 20]) != min(self.lowest[0 : 20]):
+			self.RSVmonth = (self.closing[0] - min(self.lowest[0 : 20])) / (max(self.highest[0 : 20]) - min(self.lowest[0 : 20])) * 100
+		else:
+			self.RSVmonth = 50
 		self.Kmonth.append(self.RSVmonth / 3 + 100 / 3)
 		self.Dmonth.append(self.Kmonth[19] / 3 + 100 / 3)
 
 		for i in range(20, len(self.closing)):
-			self.RSVmonth = (self.closing[i] - min(self.lowest[(i - 19) : (i + 1)])) / (max(self.highest[(i - 19) : (i + 1)]) - min(self.lowest[(i - 19) : (i + 1)])) * 100
+			if max(self.highest[(i - 19) : (i + 1)]) != min(self.lowest[(i - 19) : (i + 1)]):
+				self.RSVmonth = (self.closing[i] - min(self.lowest[(i - 19) : (i + 1)])) / (max(self.highest[(i - 19) : (i + 1)]) - min(self.lowest[(i - 19) : (i + 1)])) * 100
+			else:
+				self.RSVmonth = self.Kmonth[i - 1]
 			self.Kmonth.append(self.RSVmonth / 3 + self.Kmonth[i - 1] * 2 / 3)
 			self.Dmonth.append(self.Kmonth[i] / 3 + self.Dmonth[i - 1] * 2 / 3)
 
